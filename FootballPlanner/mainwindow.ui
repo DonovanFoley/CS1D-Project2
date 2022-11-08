@@ -13,8 +13,209 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
-  <widget class="QMenuBar" name="menubar"/>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QStackedWidget" name="stackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>-20</y>
+      <width>801</width>
+      <height>601</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="MainPage">
+     <widget class="QLabel" name="label_welcome">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>60</y>
+        <width>121</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Welcome</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_admin">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>350</y>
+        <width>151</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Admin</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_main">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>350</y>
+        <width>141</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Main Menu</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_2_admin">
+     <widget class="QWidget" name="horizontalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>240</y>
+        <width>351</width>
+        <height>181</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_username">
+         <property name="text">
+          <string>Username:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_password">
+         <property name="text">
+          <string>Password</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit_username"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_password">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QLabel" name="label_admin">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>60</y>
+        <width>191</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Admin Login</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_login">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>440</y>
+        <width>131</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>PushButton</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_3_adminEdit">
+     <widget class="QLabel" name="label_adminEdit">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>30</y>
+        <width>171</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Admin Edit</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_homeAdminEdit">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>520</y>
+        <width>80</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Home</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_4_mainPage">
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>50</y>
+        <width>191</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Main Page</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_homeMainPage">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>520</y>
+        <width>80</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Home</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
