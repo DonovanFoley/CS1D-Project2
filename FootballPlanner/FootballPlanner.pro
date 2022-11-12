@@ -9,14 +9,26 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    adminwindow.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainmenu.cpp \
+    mainwindow.cpp \
+    menuselectwindow.cpp \
+    tripselectwindow.cpp
 
 HEADERS += \
-    mainwindow.h
+    adminwindow.h \
+    mainmenu.h \
+    mainwindow.h \
+    menuselectwindow.h \
+    tripselectwindow.h
 
 FORMS += \
-    mainwindow.ui
+    adminwindow.ui \
+    mainmenu.ui \
+    mainwindow.ui \
+    menuselectwindow.ui \
+    tripselectwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
