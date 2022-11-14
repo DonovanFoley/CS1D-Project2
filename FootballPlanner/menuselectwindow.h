@@ -36,6 +36,14 @@ private slots:
 
     void on_goBackSecondPushButton_clicked();
 
+    void on_stadiumsByDatePushButton_clicked();
+
+    void on_afcTeamPushButton_clicked();
+
+    void on_nfcTeamsPushButton_clicked();
+
+    void on_nfcNorthPushButton_clicked();
+
 private:
     Ui::menuselectwindow *ui;
     QSqlDatabase myDb;
