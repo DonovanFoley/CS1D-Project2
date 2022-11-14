@@ -149,3 +149,114 @@ void menuselectwindow::on_goBackSecondPushButton_clicked()
     ui->filterLabel->setText("Current Filter: ");
 }
 
+
+void menuselectwindow::on_stadiumsByDatePushButton_clicked()
+{
+    QSqlDatabase myDb;
+
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+    QSqlQueryModel* qryModel = new QSqlQueryModel();
+
+    ui->mainMenuStackedWidget->setCurrentIndex(1);
+
+    ui->footBallTeamTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->footBallTeamTableWidget->setAlternatingRowColors(true);
+
+    qryModel->setQuery("SELECT StadiumName, TeamName FROM TeamInformation ORDER BY DateOpened ASC");
+    ui->footBallTeamTableWidget->setModel(qryModel);
+
+    ui->filterLabel->setText("Current Filter: Show Stadium Names and Teams Associated");
+}
+
+
+
+
+
+void menuselectwindow::on_afcTeamPushButton_clicked()
+{
+    QSqlDatabase myDb;
+
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+    QSqlQueryModel* qryModel = new QSqlQueryModel();
+
+    ui->mainMenuStackedWidget->setCurrentIndex(1);
+
+    ui->footBallTeamTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->footBallTeamTableWidget->setAlternatingRowColors(true);
+
+    qryModel->setQuery("SELECT TeamName, Conference FROM TeamInformation WHERE Conference = 'American Football Conference' ORDER BY TeamName");
+    ui->footBallTeamTableWidget->setModel(qryModel);
+
+    ui->filterLabel->setText("Current Filter: Show AFC Teams");
+}
+
+
+void menuselectwindow::on_nfcTeamsPushButton_clicked()
+{
+    QSqlDatabase myDb;
+
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+    QSqlQueryModel* qryModel = new QSqlQueryModel();
+
+    ui->mainMenuStackedWidget->setCurrentIndex(1);
+
+    ui->footBallTeamTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->footBallTeamTableWidget->setAlternatingRowColors(true);
+
+    qryModel->setQuery("SELECT TeamName, Conference FROM TeamInformation WHERE Conference = 'National Football Conference' ORDER BY TeamName");
+    ui->footBallTeamTableWidget->setModel(qryModel);
+
+    ui->filterLabel->setText("Current Filter: Show NFC Teams");
+}
+
+
+void menuselectwindow::on_nfcNorthPushButton_clicked()
+{
+    QSqlDatabase myDb;
+
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+    QSqlQueryModel* qryModel = new QSqlQueryModel();
+
+    ui->mainMenuStackedWidget->setCurrentIndex(1);
+
+    ui->footBallTeamTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->footBallTeamTableWidget->setAlternatingRowColors(true);
+
+    qryModel->setQuery("SELECT TeamName, Division FROM TeamInformation WHERE  Division = 'NFC  North' ORDER BY TeamName ASC");
+    ui->footBallTeamTableWidget->setModel(qryModel);
+
+    ui->filterLabel->setText("Current Filter: Show NFC North Teams");
+}
+
