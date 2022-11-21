@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QtSql>
 #include <QSqlDatabase>
+#include "mapsouvenir.h"
 
 namespace Ui {
 class menuselectwindow;
@@ -43,6 +44,12 @@ private slots:
     void on_nfcTeamsPushButton_clicked();
 
     void on_nfcNorthPushButton_clicked();
+
+    void on_nflTeamSouvenir_clicked();
+
+    void on_souvenirSearchButton_clicked();
+
+    void on_goBackSecondPushButton_2_clicked();
 
 private:
     Ui::menuselectwindow *ui;
