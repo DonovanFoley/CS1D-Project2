@@ -260,3 +260,65 @@ void menuselectwindow::on_nfcNorthPushButton_clicked()
     ui->filterLabel->setText("Current Filter: Show NFC North Teams");
 }
 
+void menuselectwindow::on_nflTeamSouvenir_clicked()
+{
+    QSqlQuery query(myDb);
+    QSqlRecord record;
+    QSqlQueryModel *teamsModel = new QSqlQueryModel();
+
+
+    query.exec("SELECT DISTINCT TeamName FROM souvenirList");
+    teamsModel->setQuery(std::move(query));
+
+    for(int i = 0; i < teamsModel->rowCount(); i++)
+    {
+        record = teamsModel->record(i);
+        ui->teamComboBox->addItem(record.value(0).toString());
+    }
+    ui->mainMenuStackedWidget->setCurrentIndex(3);
+}
+
+
+void menuselectwindow::on_souvenirSearchButton_clicked()
+{
+    ui->souvenirTableWidget->setRowCount(0);
+    ui->souvenirTableWidget->setColumnCount(0);
+
+    mapSouvenir map;
+    QString team;
+    QStringList teamHeaders = {"Souvenir Item" , "Price"};
+    team = ui->teamComboBox->currentText();
+    ui->souvenirTableWidget->insertColumn(0);
+    ui->souvenirTableWidget->insertColumn(1);
+    ui->souvenirTableWidget->setHorizontalHeaderLabels(teamHeaders);
+    ui->souvenirTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->souvenirTableWidget->setAlternatingRowColors(true);
+
+    mapSouvenirVector temp = map.at(team);
+    for (int i = 0; i < temp.size(); i++)
+    {
+        QString itemName;
+        double itemPrice = 0.0;
+
+        temp.returnItemFromIndex(i, itemName,itemPrice);\
+        //qDebug().noquote() << "item Price" << itemPrice;
+
+        QTableWidgetItem* item = new QTableWidgetItem(itemName);
+        QTableWidgetItem* price= new QTableWidgetItem(QString::number(itemPrice));
+        item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+        price->setFlags(price->flags() ^ Qt::ItemIsEditable);
+        ui->souvenirTableWidget->insertRow(ui->souvenirTableWidget->rowCount());
+        ui->souvenirTableWidget->setItem(i,0,item);
+        ui->souvenirTableWidget->setItem(i,1,price);
+    }
+
+}
+
+
+void menuselectwindow::on_goBackSecondPushButton_2_clicked()
+{
+    ui->mainMenuStackedWidget->setCurrentIndex(0);
+    ui->souvenirTableWidget->setRowCount(0);
+    ui->souvenirTableWidget->setColumnCount(0);
+}
+

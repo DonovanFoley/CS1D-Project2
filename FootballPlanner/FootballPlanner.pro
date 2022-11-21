@@ -13,6 +13,7 @@ SOURCES += \
     main.cpp \
     mainmenu.cpp \
     mainwindow.cpp \
+    mapsouvenir.cpp \
     menuselectwindow.cpp \
     tripselectwindow.cpp
 
@@ -20,6 +21,7 @@ HEADERS += \
     adminwindow.h \
     mainmenu.h \
     mainwindow.h \
+    mapsouvenir.h \
     menuselectwindow.h \
     tripselectwindow.h
 
