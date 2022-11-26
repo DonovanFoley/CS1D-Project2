@@ -1,0 +1,684 @@
+Arizona Cardinals
+27
+State Farm Stadium
+3
+AT&T Stadium
+870
+Arizona Cardinals
+27
+State Farm Stadium
+6
+Empower Field at Mile High
+580
+Arizona Cardinals
+27
+State Farm Stadium
+14
+Levi's Stadium
+650
+Arizona Cardinals
+27
+State Farm Stadium
+22
+NRG Stadium
+1115
+Arizona Cardinals
+27
+State Farm Stadium
+25
+SoFi Stadium
+372
+Atlanta Falcons
+19
+Mercedes-Benz Stadium
+3
+AT&T Stadium
+740
+Atlanta Falcons
+19
+Mercedes-Benz Stadium
+4
+Bank of America Stadium
+225
+Atlanta Falcons
+19
+Mercedes-Benz Stadium
+5
+Caesars Superdome
+425
+Atlanta Falcons
+19
+Mercedes-Benz Stadium
+11
+Hard Rock Stadium
+600
+Atlanta Falcons
+19
+Mercedes-Benz Stadium
+23
+Paycor Stadium
+375
+Baltimore Ravens
+18
+M&T Bank Stadium
+7
+FedExField
+90
+Baltimore Ravens
+18
+M&T Bank Stadium
+15
+Lincoln Financial Field
+80
+Buffalo Bills
+12
+Highmark Stadium
+0
+Acrisure Stadium
+225
+Buffalo Bills
+12
+Highmark Stadium
+9
+Ford Field
+210
+Buffalo Bills
+12
+Highmark Stadium
+10
+Gillette Stadium
+429
+Buffalo Bills
+12
+Highmark Stadium
+13
+Lambeau Field
+430
+Buffalo Bills
+12
+Highmark Stadium
+17
+Lumen Field
+2070
+Carolina Panthers
+4
+Bank of America Stadium
+0
+Acrisure Stadium
+365
+Carolina Panthers
+4
+Bank of America Stadium
+7
+FedExField
+340
+Carolina Panthers
+4
+Bank of America Stadium
+19
+Mercedes-Benz Stadium
+225
+Carolina Panthers
+4
+Bank of America Stadium
+28
+TIAA Bank Field
+342
+Chicago Bears
+26
+Soldier Field
+2
+Arrowhead Stadium
+415
+Chicago Bears
+26
+Soldier Field
+13
+Lambeau Field
+80
+Chicago Bears
+26
+Soldier Field
+16
+Lucas Oil Stadium
+50
+Cincinnati Bengals
+23
+Paycor Stadium
+0
+Acrisure Stadium
+260
+Cincinnati Bengals
+23
+Paycor Stadium
+8
+FirstEnergy Stadium
+225
+Cincinnati Bengals
+23
+Paycor Stadium
+16
+Lucas Oil Stadium
+250
+Cincinnati Bengals
+23
+Paycor Stadium
+19
+Mercedes-Benz Stadium
+375
+Cincinnati Bengals
+23
+Paycor Stadium
+21
+Nissan Stadium
+240
+Cleveland Browns
+8
+FirstEnergy Stadium
+0
+Acrisure Stadium
+115
+Cleveland Browns
+8
+FirstEnergy Stadium
+9
+Ford Field
+90
+Cleveland Browns
+8
+FirstEnergy Stadium
+23
+Paycor Stadium
+225
+Dallas Cowboys
+3
+AT&T Stadium
+2
+Arrowhead Stadium
+460
+Dallas Cowboys
+3
+AT&T Stadium
+6
+Empower Field at Mile High
+650
+Dallas Cowboys
+3
+AT&T Stadium
+19
+Mercedes-Benz Stadium
+740
+Dallas Cowboys
+3
+AT&T Stadium
+22
+NRG Stadium
+230
+Dallas Cowboys
+3
+AT&T Stadium
+27
+State Farm Stadium
+870
+Denver Broncos
+6
+Empower Field at Mile High
+2
+Arrowhead Stadium
+560
+Denver Broncos
+6
+Empower Field at Mile High
+3
+AT&T Stadium
+650
+Denver Broncos
+6
+Empower Field at Mile High
+14
+Levi's Stadium
+930
+Denver Broncos
+6
+Empower Field at Mile High
+25
+SoFi Stadium
+1015
+Denver Broncos
+6
+Empower Field at Mile High
+27
+State Farm Stadium
+580
+Detroit Lions
+9
+Ford Field
+8
+FirstEnergy Stadium
+90
+Detroit Lions
+9
+Ford Field
+12
+Highmark Stadium
+210
+Detroit Lions
+9
+Ford Field
+16
+Lucas Oil Stadium
+240
+Green Bay Packers
+13
+Lambeau Field
+12
+Highmark Stadium
+430
+Green Bay Packers
+13
+Lambeau Field
+26
+Soldier Field
+80
+Green Bay Packers
+13
+Lambeau Field
+29
+U.S. Bank Stadium
+300
+Houston Texans
+22
+NRG Stadium
+3
+AT&T Stadium
+230
+Houston Texans
+22
+NRG Stadium
+5
+Caesars Superdome
+320
+Houston Texans
+22
+NRG Stadium
+11
+Hard Rock Stadium
+965
+Houston Texans
+22
+NRG Stadium
+21
+Nissan Stadium
+670
+Houston Texans
+22
+NRG Stadium
+27
+State Farm Stadium
+1115
+Indianapolis Colts
+16
+Lucas Oil Stadium
+9
+Ford Field
+240
+Indianapolis Colts
+16
+Lucas Oil Stadium
+23
+Paycor Stadium
+250
+Indianapolis Colts
+16
+Lucas Oil Stadium
+26
+Soldier Field
+50
+Jacksonville Jaguars
+28
+TIAA Bank Field
+4
+Bank of America Stadium
+342
+Jacksonville Jaguars
+28
+TIAA Bank Field
+11
+Hard Rock Stadium
+315
+Jacksonville Jaguars
+28
+TIAA Bank Field
+24
+Raymond James Stadium
+170
+Kansas City Chiefs
+2
+Arrowhead Stadium
+3
+AT&T Stadium
+460
+Kansas City Chiefs
+2
+Arrowhead Stadium
+6
+Empower Field at Mile High
+560
+Kansas City Chiefs
+2
+Arrowhead Stadium
+21
+Nissan Stadium
+470
+Kansas City Chiefs
+2
+Arrowhead Stadium
+26
+Soldier Field
+415
+Las Vegas Raiders
+1
+Allegiant Stadium
+14
+Levi's Stadium
+25
+Las Vegas Raiders
+1
+Allegiant Stadium
+17
+Lumen Field
+680
+Las Vegas Raiders
+1
+Allegiant Stadium
+25
+SoFi Stadium
+270
+Los Angeles Chargers
+25
+SoFi Stadium
+6
+Empower Field at Mile High
+1015
+Los Angeles Chargers
+25
+SoFi Stadium
+27
+State Farm Stadium
+372
+Los Angeles Rams
+25
+SoFi Stadium
+1
+Allegiant Stadium
+270
+Los Angeles Rams
+25
+SoFi Stadium
+14
+Levi's Stadium
+200
+Los Angeles Rams
+25
+SoFi Stadium
+29
+U.S. Bank Stadium
+1500
+Miami Dolphins
+11
+Hard Rock Stadium
+10
+Gillette Stadium
+1255
+Miami Dolphins
+11
+Hard Rock Stadium
+19
+Mercedes-Benz Stadium
+600
+Miami Dolphins
+11
+Hard Rock Stadium
+22
+NRG Stadium
+965
+Miami Dolphins
+11
+Hard Rock Stadium
+24
+Raymond James Stadium
+210
+Miami Dolphins
+11
+Hard Rock Stadium
+28
+TIAA Bank Field
+315
+Minnesota Vikings
+29
+U.S. Bank Stadium
+13
+Lambeau Field
+300
+Minnesota Vikings
+29
+U.S. Bank Stadium
+17
+Lumen Field
+1390
+Minnesota Vikings
+29
+U.S. Bank Stadium
+21
+Nissan Stadium
+700
+Minnesota Vikings
+29
+U.S. Bank Stadium
+25
+SoFi Stadium
+1500
+New England Patriots
+10
+Gillette Stadium
+11
+Hard Rock Stadium
+1255
+New England Patriots
+10
+Gillette Stadium
+12
+Highmark Stadium
+429
+New England Patriots
+10
+Gillette Stadium
+20
+MetLife Stadium
+195
+New Orleans Saints
+5
+Caesars Superdome
+19
+Mercedes-Benz Stadium
+425
+New Orleans Saints
+5
+Caesars Superdome
+22
+NRG Stadium
+320
+New Orleans Saints
+5
+Caesars Superdome
+24
+Raymond James Stadium
+480
+New York Giants
+20
+MetLife Stadium
+10
+Gillette Stadium
+195
+New York Giants
+20
+MetLife Stadium
+15
+Lincoln Financial Field
+50
+New York Jets
+20
+MetLife Stadium
+10
+Gillette Stadium
+195
+New York Jets
+20
+MetLife Stadium
+15
+Lincoln Financial Field
+50
+Philadelphia Eagles
+15
+Lincoln Financial Field
+0
+Acrisure Stadium
+315
+Philadelphia Eagles
+15
+Lincoln Financial Field
+18
+M&T Bank Stadium
+80
+Philadelphia Eagles
+15
+Lincoln Financial Field
+20
+MetLife Stadium
+50
+Pittsburgh Steelers
+0
+Acrisure Stadium
+4
+Bank of America Stadium
+365
+Pittsburgh Steelers
+0
+Acrisure Stadium
+8
+FirstEnergy Stadium
+115
+Pittsburgh Steelers
+0
+Acrisure Stadium
+12
+Highmark Stadium
+225
+Pittsburgh Steelers
+0
+Acrisure Stadium
+15
+Lincoln Financial Field
+315
+Pittsburgh Steelers
+0
+Acrisure Stadium
+23
+Paycor Stadium
+260
+San Francisco 49ers
+14
+Levi's Stadium
+1
+Allegiant Stadium
+25
+San Francisco 49ers
+14
+Levi's Stadium
+6
+Empower Field at Mile High
+930
+San Francisco 49ers
+14
+Levi's Stadium
+25
+SoFi Stadium
+200
+San Francisco 49ers
+14
+Levi's Stadium
+27
+State Farm Stadium
+650
+Seattle Seahawks
+17
+Lumen Field
+1
+Allegiant Stadium
+680
+Seattle Seahawks
+17
+Lumen Field
+12
+Highmark Stadium
+2070
+Seattle Seahawks
+17
+Lumen Field
+29
+U.S. Bank Stadium
+1390
+Tampa Bay Buccaneers
+24
+Raymond James Stadium
+5
+Caesars Superdome
+480
+Tampa Bay Buccaneers
+24
+Raymond James Stadium
+11
+Hard Rock Stadium
+210
+Tampa Bay Buccaneers
+24
+Raymond James Stadium
+28
+TIAA Bank Field
+170
+Tennessee Titans
+21
+Nissan Stadium
+2
+Arrowhead Stadium
+470
+Tennessee Titans
+21
+Nissan Stadium
+22
+NRG Stadium
+670
+Tennessee Titans
+21
+Nissan Stadium
+23
+Paycor Stadium
+240
+Tennessee Titans
+21
+Nissan Stadium
+29
+U.S. Bank Stadium
+700
+Washington Redskins
+7
+FedExField
+4
+Bank of America Stadium
+340
+Washington Redskins
+7
+FedExField
+18
+M&T Bank Stadium
+90

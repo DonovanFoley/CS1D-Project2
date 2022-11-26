@@ -1,0 +1,42 @@
+San Diego Sailors
+30
+Qualcomm Stadium
+27
+State Farm Stadium
+300
+San Diego Sailors
+30
+Qualcomm Stadium
+25
+SoFi Stadium
+121
+San Diego Sailors
+30
+Qualcomm Stadium
+6
+Empower Field at Mile High
+830
+Arizona Cardinals
+27
+State Farm Stadium
+30
+Qualcomm Stadium
+300
+Los Angeles Rams
+25
+Sofi Stadium
+30
+Qualcomm Stadium
+121
+Los Angeles Chargers
+25
+Sofi Stadium
+30
+Qualcomm Stadium
+121
+Denver Broncos
+6
+Empower Field at Mile High
+30
+Qualcomm Stadium
+830
