@@ -170,10 +170,10 @@ void menuselectwindow::on_stadiumsByDatePushButton_clicked()
     ui->footBallTeamTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->footBallTeamTableWidget->setAlternatingRowColors(true);
 
-    qryModel->setQuery("SELECT StadiumName, TeamName FROM TeamInformation ORDER BY DateOpened ASC");
+    qryModel->setQuery("SELECT StadiumName, TeamName, DateOpened FROM TeamInformation ORDER BY DateOpened ASC");
     ui->footBallTeamTableWidget->setModel(qryModel);
 
-    ui->filterLabel->setText("Current Filter: Show Stadium Names and Teams Associated");
+    ui->filterLabel->setText("Current Filter: Show Stadium Names and Teams Associated by Date Opened");
 }
 
 
@@ -248,13 +248,18 @@ void menuselectwindow::on_nfcNorthPushButton_clicked()
     }
 
     QSqlQueryModel* qryModel = new QSqlQueryModel();
+    QSqlQuery *prepQuery = new QSqlQuery(myDb);
 
     ui->mainMenuStackedWidget->setCurrentIndex(1);
 
     ui->footBallTeamTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->footBallTeamTableWidget->setAlternatingRowColors(true);
 
-    qryModel->setQuery("SELECT TeamName, Division FROM TeamInformation WHERE  Division = 'NFC  North' ORDER BY TeamName ASC");
+    prepQuery->prepare("SELECT TeamName, Division FROM TeamInformation WHERE  Division = :div ORDER BY TeamName ASC");
+    prepQuery->bindValue(":div", "NFC North");
+    prepQuery->exec();
+
+    qryModel->setQuery(std::move(*prepQuery));
     ui->footBallTeamTableWidget->setModel(qryModel);
 
     ui->filterLabel->setText("Current Filter: Show NFC North Teams");
