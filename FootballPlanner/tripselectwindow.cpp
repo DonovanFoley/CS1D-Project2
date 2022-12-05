@@ -35,6 +35,7 @@ void tripselectwindow::on_OrderPushButton_clicked()
     QSqlQuery *deleteQuery = new QSqlQuery(myDb);
 
     deleteQuery->exec("DELETE FROM CustomTrip");
+    deleteQuery->exec("DELETE FROM FinalTrip");
 
     ui->teamsTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->teamsTableView->setAlternatingRowColors(true);
@@ -113,45 +114,9 @@ void tripselectwindow::on_calcDistancePushButton_clicked()
         myDb = QSqlDatabase::addDatabase("QSQLITE");
     }
 
-    if (addTeam != 0)
-    {
-        QSqlQuery *addQuery = new QSqlQuery(myDb);
-        QSqlQuery *startingTeamQuery = new QSqlQuery(myDb);
-        QSqlQueryModel* qryModel = new QSqlQueryModel();
-        QString startingTeam;
+        djAlgo performAlgo;
+        performAlgo.CustomOrderTrip();
 
-        startingTeamQuery->exec("SELECT TeamName FROM CustomTrip");
-        startingTeamQuery->next();
-        startingTeam = startingTeamQuery->value(0).toString();
-
-        if (addTeam == 1)
-        {
-              addQuery->prepare("INSERT INTO FinalTrip VALUES ((:TeamName),(:distance))");
-              addQuery->bindValue(":TeamName", startingTeam);
-              addQuery->bindValue(":distance", 0);
-              addQuery->exec();
-              nextTeamCheck = addTeam;
-        }
-        else
-        {
-
-//            customTripMap map;
-//            map.fullMap(startingTeam, addCity);
-//            nextCityCheck = addCity;
-        }
-        ui->customTripTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-        ui->customTripTableView->setAlternatingRowColors(true);
-        qryModel->setQuery("SELECT City, Distance_Travelled AS'Total Distance Traveled' FROM Berlin_trip");
-        ui->customTripTableView->setModel(qryModel);
-        //customTripNotClicked = false;
-        //ui->customTripErrorLabel->setVisible(false);
-
-    }
-    else
-    {
-//        ui->customTripErrorLabel->setVisible(true);
-//        ui->customTripErrorLabel->setText("No City Entered: Please Enter a City");
-    }
 }
 
 
@@ -164,6 +129,9 @@ void tripselectwindow::on_DJPushButton_clicked()
     QSqlQueryModel* teamModel = new QSqlQueryModel();
     QSqlQueryModel* teamPlanModel = new QSqlQueryModel();
     QSqlQuery *deleteQuery = new QSqlQuery(myDb);
+
+    deleteQuery->exec("DELETE FROM CustomTrip");
+    deleteQuery->exec("DELETE FROM FinalTrip");
 
     query.exec("SELECT DISTINCT TeamName FROM TeamInformation");
 
@@ -185,12 +153,19 @@ void tripselectwindow::on_DJSelectPushButton_clicked()
 {
     QString team;
     QString stadium;
+    int distance;
     QSqlQuery *addTeamQuery = new QSqlQuery(myDb);
 
     team = ui->DJTeamsComboBox->currentText();
 
     djAlgo performAlgo;
     performAlgo.DijkstraAlgo("Lambeau Field");
+
+    addTeamQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
+    addTeamQuery->bindValue(":teamname", "Green Bay Packers");
+    addTeamQuery->bindValue(":distance", 0);
+    addTeamQuery->exec();
+    addTeamQuery->next();
 
     addTeamQuery->prepare("SELECT StadiumName From TeamInformation WHERE TeamName = :team");
     addTeamQuery->bindValue(":team", team);
@@ -200,9 +175,15 @@ void tripselectwindow::on_DJSelectPushButton_clicked()
 
     for (int i = 0; i < performAlgo.edgeCost.size(); i++) {
         if (stadium == QString::fromStdString(performAlgo.verticies[i].vertexName)) {
-            ui->DJCostLabel->setText(QString::number(performAlgo.edgeCost[i]));
+            distance = performAlgo.edgeCost[i];
         }
     }
+
+    addTeamQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
+    addTeamQuery->bindValue(":teamname", team);
+    addTeamQuery->bindValue(":distance", distance);
+    addTeamQuery->exec();
+    addTeamQuery->next();
 
 }
 

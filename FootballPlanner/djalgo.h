@@ -1,6 +1,7 @@
 #ifndef DJALGO_H
 #define DJALGO_H
 
+#include "qtablewidget.h"
 #include <vector>
 #include <iostream>
 #include <iomanip>
@@ -412,6 +413,79 @@ class djAlgo :public initEdgeList, initVertexList
 
                 stadiumName = searchQuery->value(0).toString();
                 return stadiumName;
+            }
+
+            void CustomOrderTrip()
+            {
+                QString stadium;
+                QString prevStadium;
+                int distance = 0;
+                QSqlDatabase myDb;
+
+                if(QSqlDatabase::contains("qt_sql_default_connection"))
+                {
+                    myDb = QSqlDatabase::database("qt_sql_default_connection");
+                }
+                else
+                {
+                    myDb = QSqlDatabase::addDatabase("QSQLITE");
+                }
+
+                if (myDb.open())
+                {
+                    qDebug().noquote() << "db found and open";
+                }
+                else
+                {
+                    qDebug().noquote() << "db not found";
+                }
+
+                QSqlQueryModel model;//model is readonly access to query results
+                QSqlQuery query(myDb);
+                QSqlQuery *addQuery = new QSqlQuery(myDb);
+                query.prepare("SELECT TeamName FROM CustomTrip");
+                query.exec();
+                std::vector<QString> team_names;
+
+                while (query.next())
+                {
+                    team_names.push_back(query.value(0).toString());
+                }
+
+                for (int i = 0; i < team_names.size(); i++) {
+                    if (i == 0) {
+                        addQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
+                        addQuery->bindValue(":teamname", team_names[i]);
+                        addQuery->bindValue(":distance", 0);
+                        addQuery->exec();
+                        addQuery->next();
+                    }
+                    else {
+                        stadium = getStadiumNameFromTeamName(team_names[i]);
+                        DijkstraAlgo(stadium.toStdString());
+                        qDebug().noquote() << prevStadium;
+                        prevStadium = getStadiumNameFromTeamName(team_names[i - 1]);
+                        if (prevStadium == stadium) {
+                            addQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
+                            addQuery->bindValue(":teamname", team_names[i]);
+                            addQuery->bindValue(":distance", distance);
+                            addQuery->exec();
+                            addQuery->next();
+                        }
+                        else {
+                        for (int j = 0; j < edgeCost.size(); j++) {
+                            if (prevStadium == QString::fromStdString(verticies[j].vertexName)) {
+                                distance += edgeCost[j];
+                            }
+                        }
+                        addQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
+                        addQuery->bindValue(":teamname", team_names[i]);
+                        addQuery->bindValue(":distance", distance);
+                        addQuery->exec();
+                        addQuery->next();
+                        }
+                    }
+                }
             }
 };
 
