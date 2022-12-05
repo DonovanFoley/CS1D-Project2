@@ -339,106 +339,79 @@ class djAlgo :public initEdgeList, initVertexList
 //            }
 
 
+            QString getStadiumNameFromTeamName(QString teamName)
+            {
+               QString stadiumName;
+
+               QSqlDatabase myDb;
+
+               if(QSqlDatabase::contains("qt_sql_default_connection"))
+               {
+                   myDb = QSqlDatabase::database("qt_sql_default_connection");
+               }
+               else
+               {
+                   myDb = QSqlDatabase::addDatabase("QSQLITE");
+               }
+
+               QSqlQuery *searchQuery = new QSqlQuery(myDb);
+               searchQuery->prepare("SELECT StadiumName FROM TeamInformation where TeamName = :name");
+               searchQuery->bindValue(":name", teamName);
+               searchQuery->exec();
+               searchQuery->next();
+
+               stadiumName = searchQuery->value(0).toString();
+               return stadiumName;
+            }
+
+            int getStadiumIdFromStadiumName(QString stadiumName)
+            {
+                int stadiumID;
+
+                QSqlDatabase myDb;
+
+                if(QSqlDatabase::contains("qt_sql_default_connection"))
+                {
+                    myDb = QSqlDatabase::database("qt_sql_default_connection");
+                }
+                else
+                {
+                    myDb = QSqlDatabase::addDatabase("QSQLITE");
+                }
+
+                QSqlQuery *searchQuery = new QSqlQuery(myDb);
+                searchQuery->prepare("SELECT DISTINCT startingStadiumId FROM nflDistances where startingStadiumName = :name");
+                searchQuery->bindValue(":name", stadiumName);
+                searchQuery->exec();
+                searchQuery->next();
+
+                stadiumID = searchQuery->value(0).toInt();
+                return stadiumID;
+
+            }
+
             QString stadiumName(int stadiumID)
             {
                 QString stadiumName;
 
-                switch (stadiumID)
+                 QSqlDatabase myDb;
+
+                if(QSqlDatabase::contains("qt_sql_default_connection"))
                 {
-                    case 0: stadiumName = "Acrisure Stadium";
-                            break;
-
-                    case 1: stadiumName = "Allegiant Stadium";
-                            break;
-
-                    case 2: stadiumName = "Arrowhead Stadium";
-                            break;
-
-                    case 3: stadiumName = "AT&T Stadium";
-                            break;
-
-                    case 4: stadiumName = "Bank of America Stadium";
-                            break;
-
-                    case 5: stadiumName = "Caesars Superdome";
-                            break;
-
-                    case 6: stadiumName = "Empower Field at Mile High";
-                            break;
-
-                    case 7: stadiumName = "FedExField";
-                            break;
-
-                    case 8: stadiumName = "FirstEnergy Stadium";
-                            break;
-
-                    case 9: stadiumName = "Ford Field";
-                            break;
-
-                    case 10: stadiumName = "Gillette Stadium";
-                            break;
-
-                    case 11: stadiumName = "Hard Rock Stadium";
-                            break;
-
-                    case 12: stadiumName = "Highmark Stadium";
-                            break;
-
-                    case 13: stadiumName = "Lambeau Field";
-                            break;
-
-                    case 14: stadiumName = "Levi's Stadium";
-                            break;
-
-                    case 15: stadiumName = "Lincoln Financial Field";
-                            break;
-
-                    case 16: stadiumName = "Lucas Oil Stadium";
-                            break;
-
-                    case 17: stadiumName = "Lumen Field";
-                            break;
-
-                    case 18: stadiumName = "M&T Bank Stadium";
-                            break;
-
-                    case 19: stadiumName = "Mercedes-Benz Stadium";
-                            break;
-
-                    case 20: stadiumName = "MetLife Stadium";
-                            break;
-
-                    case 21: stadiumName = "Nissan Stadium";
-                            break;
-
-                    case 22: stadiumName = "NRG Stadium";
-                            break;
-
-                    case 23: stadiumName = "Paycor Stadium";
-                            break;
-
-                    case 24: stadiumName = "Raymond James Stadium";
-                            break;
-
-                    case 25: stadiumName = "SoFi Stadium";
-                            break;
-
-                    case 26: stadiumName = "Soldier Field";
-                            break;
-
-                    case 27: stadiumName = "State Farm Stadium";
-                            break;
-
-                    case 28: stadiumName = "TIAA Bank Field";
-                            break;
-
-                    case 29: stadiumName = "U.S. Bank Stadium";
-                            break;
-
-                    case 30: stadiumName = "Qualcomm Stadium";
-                            break;
+                    myDb = QSqlDatabase::database("qt_sql_default_connection");
+                }
+                else
+                {
+                    myDb = QSqlDatabase::addDatabase("QSQLITE");
                 }
 
+                QSqlQuery *searchQuery = new QSqlQuery(myDb);
+                searchQuery->prepare("SELECT DISTINCT startingStadiumName FROM nflDistances WHERE startingStadiumId = :id");
+                searchQuery->bindValue(":id", stadiumID);
+                searchQuery->exec();
+                searchQuery->next();
+
+                stadiumName = searchQuery->value(0).toString();
                 return stadiumName;
             }
 };
