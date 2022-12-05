@@ -319,11 +319,13 @@ void adminwindow::on_pushButton_9_clicked()
 //    djAlgo performAlgo;
 //    performAlgo.DijkstraAlgo();
 
+    int counter = 0;
     graph.initGraph();
     qDebug().noquote() << graph.discoveryStart.size();
 
     for (int i = 0; i < graph.discoveryStart.size(); i++)
     {
+        counter++;
 //        QTableWidgetItem *distance = new QTableWidgetItem(QString::number(performAlgo.edgeCost[i]));
 //        QTableWidgetItem *start = new QTableWidgetItem("green bay packers stadium legion]");
 //        QTableWidgetItem *end = new QTableWidgetItem(QString::fromStdString(performAlgo.verticies[i].vertexName));
@@ -367,6 +369,9 @@ void adminwindow::on_pushButton_9_clicked()
         ui->dfsTableWidget->setItem(ui->dfsTableWidget->rowCount()-1,3,edgeType);
     }
 
+    QString distanceInt = QString::number(graph.distanceOutput[counter - 1]);
+    ui->adminFunctionLabel->setText("Current Function: DFS from Minnesota Vikings");
+    ui->distanceLabel->setText("Total Distance Traveled: " + distanceInt);
     ui->adminStackedWidget->setCurrentIndex(3);
 
 }
@@ -381,4 +386,47 @@ void adminwindow::on_goBackMenuAdmin2_clicked()
 void adminwindow::on_goBackAdmin3_clicked()
 {
     ui->adminStackedWidget->setCurrentIndex(2);
+    ui->dfsTableWidget->setRowCount(0);
+    ui->dfsTableWidget->setColumnCount(0);
+    ui->adminFunctionLabel->setText("");
+    ui->distanceLabel->setText("");
+
 }
+
+void adminwindow::on_mstOfNFLStadiumsPushButton_clicked()
+{
+    QStringList dfsHeaders = {"From", "To", "Distance Traveled"};
+    ui->dfsTableWidget->insertColumn(0);
+    ui->dfsTableWidget->insertColumn(1);
+    ui->dfsTableWidget->insertColumn(2);
+    ui->dfsTableWidget->setHorizontalHeaderLabels(dfsHeaders);
+    ui->dfsTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->dfsTableWidget->setAlternatingRowColors(true);
+    int counter = 0;
+
+    mstAlgo algo;
+    algo.primMSTAlgo();
+
+    for (int i = 0; i < algo.startingCity.size(); i++)
+    {
+        counter++;
+        QTableWidgetItem *distance = new QTableWidgetItem(QString::number(algo.distances[i]));
+        QTableWidgetItem *startingCityStart = new QTableWidgetItem(algo.startingCity[i]);
+        QTableWidgetItem *endingCityStart = new QTableWidgetItem(algo.endingCity[i]);
+
+        distance->setFlags(distance->flags() ^ Qt::ItemIsEditable);
+        startingCityStart->setFlags(startingCityStart->flags() ^ Qt::ItemIsEditable);
+        endingCityStart->setFlags(endingCityStart->flags() ^ Qt::ItemIsEditable);
+
+        ui->dfsTableWidget->insertRow(ui->dfsTableWidget->rowCount());
+        ui->dfsTableWidget->setItem(i,0,startingCityStart);
+        ui->dfsTableWidget->setItem(i,1,endingCityStart);
+        ui->dfsTableWidget->setItem(i,2,distance);
+    }
+
+    QString distanceInt = QString::number(algo.distance);
+    ui->adminFunctionLabel->setText("Current Function: MST of all NFL Stadiums");
+    ui->distanceLabel->setText("Total Distance Traveled: " + distanceInt);
+    ui->adminStackedWidget->setCurrentIndex(3);
+}
+

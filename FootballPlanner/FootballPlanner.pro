@@ -17,6 +17,7 @@ SOURCES += \
     mainwindow.cpp \
     mapsouvenir.cpp \
     menuselectwindow.cpp \
+    mstalgo.cpp \
     tripselectwindow.cpp
 
 HEADERS += \
@@ -27,6 +28,7 @@ HEADERS += \
     mainwindow.h \
     mapsouvenir.h \
     menuselectwindow.h \
+    mstalgo.h \
     tripselectwindow.h
 
 FORMS += \
