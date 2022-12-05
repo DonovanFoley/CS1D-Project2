@@ -80,6 +80,7 @@ class DFSGraph
         void addVertex(vertex newVertex);
         vertex getVertexByID(int vid); //vid means vertexID;
         void addEdgeById(int fromVertex, int toVertex, int weight);
+
         void DFS(vertex* startingVertex);
         void helperDFS(string name);
         QString stadiumName(int stadiumID);

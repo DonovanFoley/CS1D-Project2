@@ -8,6 +8,7 @@
 #include <QtSql>
 #include <QSqlDatabase>
 #include "dfsgraph.h"
+#include "djalgo.h"
 
 namespace Ui {
 class adminwindow;

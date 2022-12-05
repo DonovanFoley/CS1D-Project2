@@ -316,11 +316,24 @@ void adminwindow::on_pushButton_9_clicked()
     QString discov = "Discovery";
     QString back = "Back";
 
+//    djAlgo performAlgo;
+//    performAlgo.DijkstraAlgo();
+
     graph.initGraph();
     qDebug().noquote() << graph.discoveryStart.size();
+
     for (int i = 0; i < graph.discoveryStart.size(); i++)
     {
-       // qDebug().noquote() << graph.discoveryStart.size();
+//        QTableWidgetItem *distance = new QTableWidgetItem(QString::number(performAlgo.edgeCost[i]));
+//        QTableWidgetItem *start = new QTableWidgetItem("green bay packers stadium legion]");
+//        QTableWidgetItem *end = new QTableWidgetItem(QString::fromStdString(performAlgo.verticies[i].vertexName));
+
+//        ui->dfsTableWidget->insertRow(ui->dfsTableWidget->rowCount());
+//        ui->dfsTableWidget->setItem(i,0,start);
+//        ui->dfsTableWidget->setItem(i,1,end);
+//        ui->dfsTableWidget->setItem(i,2,distance);
+
+        qDebug().noquote() << graph.discoveryStart.size();
         QTableWidgetItem *distance = new QTableWidgetItem(QString::number(graph.distanceOutput[i]));
         QTableWidgetItem *discoveryEdgeStart = new QTableWidgetItem(graph.discoveryStart[i]);
         QTableWidgetItem *discoveryEdgeEnd = new QTableWidgetItem(graph.discoveryEnd[i]);
