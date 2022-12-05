@@ -71,6 +71,7 @@ class DFSGraph
         vector <QString> backEdgesOutputEnd;
         vector <int> totalDistanceOutput;
 
+
         int totalDistance = 0;
         int count = 0;
 
@@ -80,6 +81,7 @@ class DFSGraph
         void addVertex(vertex newVertex);
         vertex getVertexByID(int vid); //vid means vertexID;
         void addEdgeById(int fromVertex, int toVertex, int weight);
+        QString getStadiumNameFromTeamName(QString teamName);
 
         void DFS(vertex* startingVertex);
         void helperDFS(string name);

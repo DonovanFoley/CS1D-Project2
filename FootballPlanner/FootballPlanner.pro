@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     adminwindow.cpp \
+    bfsalgo.cpp \
     dfsgraph.cpp \
     djalgo.cpp \
     main.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
 
 HEADERS += \
     adminwindow.h \
+    bfsalgo.h \
     dfsgraph.h \
     djalgo.h \
     mainmenu.h \
