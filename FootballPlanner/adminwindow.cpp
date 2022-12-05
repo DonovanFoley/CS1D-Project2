@@ -430,3 +430,53 @@ void adminwindow::on_mstOfNFLStadiumsPushButton_clicked()
     ui->adminStackedWidget->setCurrentIndex(3);
 }
 
+
+void adminwindow::on_bfsFromLaRamsPushButton_clicked()
+{
+    QStringList dfsHeaders = {"Level", "Starting Stadium", "Ending Stadium", "Edge Type", "Distance Traveled"};
+    ui->dfsTableWidget->insertColumn(0);
+    ui->dfsTableWidget->insertColumn(1);
+    ui->dfsTableWidget->insertColumn(2);
+    ui->dfsTableWidget->insertColumn(3);
+    ui->dfsTableWidget->insertColumn(4);
+    ui->dfsTableWidget->setHorizontalHeaderLabels(dfsHeaders);
+    ui->dfsTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->dfsTableWidget->setAlternatingRowColors(true);
+    int counter = 0;
+
+    AdjacencyMatrix BFS(30);
+    QString convertString = BFS.getStadiumNameFromTeamName("Los Angeles Rams");
+
+
+    BFS.BFSStart(convertString.toStdString());
+    BFS.printTotalDistance();
+
+    for (int i = 0; i < BFS.startingStateOutput.size(); i++)
+    {
+        counter++;
+        QTableWidgetItem *level = new QTableWidgetItem(QString::number(BFS.levelOutput[i]));
+        QTableWidgetItem *startingCityStart = new QTableWidgetItem(QString::fromStdString(BFS.startingStateOutput[i]));
+        QTableWidgetItem *endingCityStart = new QTableWidgetItem(QString::fromStdString(BFS.endingStateOutput[i]));
+        QTableWidgetItem *edgeType = new QTableWidgetItem(QString::fromStdString(BFS.edgeTypeOutput[i]));
+        QTableWidgetItem *distanceTrav = new QTableWidgetItem(QString::number(BFS.distanceOutput[i]));
+
+        startingCityStart->setFlags(startingCityStart->flags() ^ Qt::ItemIsEditable);
+        endingCityStart->setFlags(endingCityStart->flags() ^ Qt::ItemIsEditable);
+        level->setFlags(level->flags() ^ Qt::ItemIsEditable);
+        edgeType->setFlags(edgeType->flags() ^ Qt::ItemIsEditable);
+        distanceTrav->setFlags(distanceTrav->flags() ^ Qt::ItemIsEditable);
+
+        ui->dfsTableWidget->insertRow(ui->dfsTableWidget->rowCount());
+        ui->dfsTableWidget->setItem(i,0,level);
+        ui->dfsTableWidget->setItem(i,1,startingCityStart);
+        ui->dfsTableWidget->setItem(i,2,endingCityStart);
+        ui->dfsTableWidget->setItem(i,3,edgeType);
+        ui->dfsTableWidget->setItem(i,4,distanceTrav);
+    }
+
+    QString distanceInt = QString::number(BFS.totalDistance);
+    ui->adminFunctionLabel->setText("Current Function: BFS starting at Los Angeles Rams");
+    ui->distanceLabel->setText("Total Distance Traveled: " + distanceInt);
+    ui->adminStackedWidget->setCurrentIndex(3);
+}
+

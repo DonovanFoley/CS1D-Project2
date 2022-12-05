@@ -180,6 +180,31 @@ void DFSGraph::addEdgeById(int fromVertex, int toVertex, int weight)
     }
 }
 
+QString DFSGraph::getStadiumNameFromTeamName(QString teamName)
+{
+   QString stadiumName;
+
+   QSqlDatabase myDb;
+
+   if(QSqlDatabase::contains("qt_sql_default_connection"))
+   {
+       myDb = QSqlDatabase::database("qt_sql_default_connection");
+   }
+   else
+   {
+       myDb = QSqlDatabase::addDatabase("QSQLITE");
+   }
+
+   QSqlQuery *searchQuery = new QSqlQuery(myDb);
+   searchQuery->prepare("SELECT StadiumName FROM TeamInformation where TeamName = :name");
+   searchQuery->bindValue(":name", teamName);
+   searchQuery->exec();
+   searchQuery->next();
+
+   stadiumName = searchQuery->value(0).toString();
+   return stadiumName;
+}
+
 void DFSGraph::DFS(vertex* startingVertex)
 {
     startingVertex->isExplored = true;
@@ -351,7 +376,8 @@ void performDFSGraph::initGraph()
 
     }
 
-    graph.helperDFS("U.S. Bank Stadium");
+    QString stadNameFromTeam = getStadiumNameFromTeamName("Minnesota Vikings");
+    graph.helperDFS(stadNameFromTeam.toStdString());
 
     for (int i = 0; i < graph.discoveryEdgesOutputStart.size(); i++)
     {
