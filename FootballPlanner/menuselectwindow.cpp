@@ -46,8 +46,7 @@ void menuselectwindow::on_nflTeamsPushButton_clicked(){
         ui->footBallTeamTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
         ui->footBallTeamTableWidget->setAlternatingRowColors(true);
 
-        prepQuery->prepare("SELECT TeamName, Conference FROM TeamInformation WHERE Conference = :conference ORDER BY TeamName ASC");
-        prepQuery->bindValue(":conference", "National Football Conference");
+        prepQuery->prepare("SELECT TeamName FROM TeamInformation ORDER BY TeamName ASC");
         prepQuery->exec();
 
         qryModel -> setQuery(std::move(*prepQuery));
