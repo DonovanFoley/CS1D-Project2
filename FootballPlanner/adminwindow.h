@@ -9,6 +9,7 @@
 #include <QSqlDatabase>
 #include "dfsgraph.h"
 #include "djalgo.h"
+#include "mstalgo.h"
 
 namespace Ui {
 class adminwindow;
@@ -48,6 +49,8 @@ private slots:
 
 
     void on_initNewFilesPushButton_clicked();
+
+    void on_mstOfNFLStadiumsPushButton_clicked();
 
 private:
     Ui::adminwindow *ui;
