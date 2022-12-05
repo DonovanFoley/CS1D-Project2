@@ -1,11 +1,15 @@
 #include "tripselectwindow.h"
 #include "ui_tripselectwindow.h"
+#include "djalgo.h"
+#include <QLabel>
+#include <QObject>
 
 tripselectwindow::tripselectwindow(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::tripselectwindow)
 {
     ui->setupUi(this);
+    ui->tripStackedWidget->setCurrentIndex(0);
 }
 
 tripselectwindow::~tripselectwindow()
@@ -37,7 +41,7 @@ void tripselectwindow::on_OrderPushButton_clicked()
     ui->customTripTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->customTripTableView->setAlternatingRowColors(true);
 
-    query.exec("SELECT DISTINCT TeamName FROM Distance");
+    query.exec("SELECT DISTINCT TeamName FROM TeamInformation");
     tripQuery.exec("SELECT Team FROM CustomTrip");
 
     teamModel->setQuery(std::move(query));
@@ -153,6 +157,52 @@ void tripselectwindow::on_calcDistancePushButton_clicked()
 
 void tripselectwindow::on_DJPushButton_clicked()
 {
+    QSqlQueryModel model;
+    QSqlQuery query(myDb);
+    QSqlQuery tripQuery(myDb);
+
+    QSqlQueryModel* teamModel = new QSqlQueryModel();
+    QSqlQueryModel* teamPlanModel = new QSqlQueryModel();
+    QSqlQuery *deleteQuery = new QSqlQuery(myDb);
+
+    query.exec("SELECT DISTINCT TeamName FROM TeamInformation");
+
+    teamModel->setQuery(std::move(query));
+
+    QSqlRecord record;
+
+    for(int i=0;i<teamModel->rowCount();i++)
+    {
+        record = teamModel->record(i);
+        ui->DJTeamsComboBox->addItem(record.value(0).toString());
+    }
+
+    ui->tripStackedWidget->setCurrentIndex(1);
+}
+
+
+void tripselectwindow::on_DJSelectPushButton_clicked()
+{
+    QString team;
+    QString stadium;
+    QSqlQuery *addTeamQuery = new QSqlQuery(myDb);
+
+    team = ui->DJTeamsComboBox->currentText();
+
+    djAlgo performAlgo;
+    performAlgo.DijkstraAlgo("Lambeau Field");
+
+    addTeamQuery->prepare("SELECT StadiumName From TeamInformation WHERE TeamName = :team");
+    addTeamQuery->bindValue(":team", team);
+    addTeamQuery->exec();
+    addTeamQuery->next();
+    stadium = addTeamQuery->value(0).toString();
+
+    for (int i = 0; i < performAlgo.edgeCost.size(); i++) {
+        if (stadium == QString::fromStdString(performAlgo.verticies[i].vertexName)) {
+            ui->DJCostLabel->setText(QString::number(performAlgo.edgeCost[i]));
+        }
+    }
 
 }
 

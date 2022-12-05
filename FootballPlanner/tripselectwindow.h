@@ -33,6 +33,8 @@ private slots:
 
     void on_DJPushButton_clicked();
 
+    void on_DJSelectPushButton_clicked();
+
 private:
     Ui::tripselectwindow *ui;
 
