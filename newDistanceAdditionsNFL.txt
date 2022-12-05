@@ -1,5 +1,5 @@
 San Diego Sailors
-30
+30			
 Qualcomm Stadium
 27
 State Farm Stadium
@@ -22,15 +22,9 @@ State Farm Stadium
 30
 Qualcomm Stadium
 300
-Los Angeles Rams
-25
-Sofi Stadium
-30
-Qualcomm Stadium
-121
 Los Angeles Chargers
 25
-Sofi Stadium
+SoFi Stadium
 30
 Qualcomm Stadium
 121

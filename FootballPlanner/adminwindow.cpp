@@ -55,6 +55,7 @@ void adminwindow::on_initNewFilesPushButton_clicked()
     initStartingTeams("ExpansionTeams.txt");
     initStartingSouvenirs("sanDiegoSouvenirList.txt");
     initStartingDistances("newDistanceAdditionsNFL.txt");
+    ifSanDiego = true;
 }
 
 
@@ -292,6 +293,7 @@ void adminwindow::on_deleteTablesPushButton_clicked()
     ui->SouvenirTableView->setModel(souvenirQryModel);
     ui->distanceTableView->setModel(distanceQryModel);
     ui->teamInfoTable->setModel(teamQryModel);
+    ifSanDiego = false;
 
 }
 
@@ -444,7 +446,17 @@ void adminwindow::on_bfsFromLaRamsPushButton_clicked()
     ui->dfsTableWidget->setAlternatingRowColors(true);
     int counter = 0;
 
-    AdjacencyMatrix BFS(30);
+    int matrixSize;
+    if (ifSanDiego == false)
+    {
+        matrixSize = 30;
+    }
+    else
+    {
+        matrixSize = 31;
+    }
+
+    AdjacencyMatrix BFS(matrixSize);
     QString convertString = BFS.getStadiumNameFromTeamName("Los Angeles Rams");
 
 
@@ -478,5 +490,93 @@ void adminwindow::on_bfsFromLaRamsPushButton_clicked()
     ui->adminFunctionLabel->setText("Current Function: BFS starting at Los Angeles Rams");
     ui->distanceLabel->setText("Total Distance Traveled: " + distanceInt);
     ui->adminStackedWidget->setCurrentIndex(3);
+}
+
+
+void adminwindow::on_nflTeamBermudaGrassPushButton_clicked()
+{
+    QSqlDatabase myDb;
+
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+    QSqlQueryModel* qryModel = new QSqlQueryModel();
+    QSqlQuery query(myDb);
+
+    ui->adminTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->adminTableView->horizontalHeader()->setAlternatingRowColors(true);
+
+    query.prepare("SELECT DISTINCT TeamName, Surface FROM TeamInformation WHERE Conference = :conf AND Surface = :surf");
+    query.bindValue(":conf", "National Football Conference");
+    query.bindValue(":surf", "Bermuda grass");
+    query.exec();
+
+    qryModel->setQuery(std::move(query));
+    ui->adminTableView->setModel(qryModel);
+
+    int count = qryModel->rowCount();
+    QString countNum = QString::number(count);
+
+    ui->adminLabel->setText("Team Count With Bermuda Grass: " + countNum);
+    ui->adminFunctionLabel_2->setText("Current Function: NFL Teams With Bermuda Grass");
+
+    ui->adminStackedWidget->setCurrentIndex(4);
+
+}
+
+
+void adminwindow::on_goBackAdmin4_clicked()
+{
+    ui->adminStackedWidget->setCurrentIndex(2);
+    ui->adminFunctionLabel_2->setText("");
+    ui->adminLabel->setText("");
+
+}
+
+
+void adminwindow::on_totalSeatingCapacityPushButton_clicked()
+{
+    QSqlDatabase myDb;
+
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+    QSqlQueryModel* qryModel = new QSqlQueryModel();
+    QSqlQuery query(myDb);
+    QSqlQuery querySum(myDb);
+
+    ui->adminTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->adminTableView->horizontalHeader()->setAlternatingRowColors(true);
+
+    query.prepare("SELECT DISTINCT TeamName, StadiumName, SeatingCapacity FROM TeamInformation WHERE Conference = :conf");
+    query.bindValue(":conf", "National Football Conference");
+    query.exec();
+
+    querySum.prepare("SELECT DISTINCT TeamName, StadiumName, SUM(SeatingCapacity) FROM TeamInformation WHERE Conference = :conf");
+    querySum.bindValue(":conf", "National Football Conference");
+    querySum.exec();
+    querySum.next();
+
+    QString num = QString::number(querySum.value(2).toInt());
+
+    qryModel->setQuery(std::move(query));
+    ui->adminTableView->setModel(qryModel);
+
+    ui->adminLabel->setText("Total Capacity:  " + num);
+    ui->adminFunctionLabel_2->setText("Current Function: Total NFL Seating Capacity");
+
+    ui->adminStackedWidget->setCurrentIndex(4);
 }
 

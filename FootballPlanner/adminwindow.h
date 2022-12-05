@@ -55,8 +55,15 @@ private slots:
 
     void on_bfsFromLaRamsPushButton_clicked();
 
+    void on_nflTeamBermudaGrassPushButton_clicked();
+
+    void on_goBackAdmin4_clicked();
+
+    void on_totalSeatingCapacityPushButton_clicked();
+
 private:
     Ui::adminwindow *ui;
+    bool ifSanDiego = false;
 };
 
 #endif // ADMINWINDOW_H
