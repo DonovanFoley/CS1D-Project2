@@ -244,9 +244,8 @@ class djAlgo :public initEdgeList, initVertexList
                     }
                 }
             }
-            void DijkstraAlgo()
+            void DijkstraAlgo(string vertex)
             {
-                string vertex = "Lambeau Field";
 
                 edgeCost.clear();
                 edgeParents.clear();
