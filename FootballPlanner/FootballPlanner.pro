@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     adminwindow.cpp \
     dfsgraph.cpp \
+    djalgo.cpp \
     main.cpp \
     mainmenu.cpp \
     mainwindow.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
 HEADERS += \
     adminwindow.h \
     dfsgraph.h \
+    djalgo.h \
     mainmenu.h \
     mainwindow.h \
     mapsouvenir.h \
