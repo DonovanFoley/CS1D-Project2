@@ -35,6 +35,12 @@ private slots:
 
     void on_DJSelectPushButton_clicked();
 
+    void on_CustomPushButton_clicked();
+
+    void on_addCustomTeamPushButton_clicked();
+
+    void on_calcCustomDistancePushButton_clicked();
+
 private:
     Ui::tripselectwindow *ui;
 

@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QStackedWidget" name="tripStackedWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="CustomMainPage">
       <widget class="QLabel" name="label">
@@ -178,9 +178,75 @@
        </layout>
       </widget>
      </widget>
-     <widget class="QWidget" name="UserOrderTrip"/>
-     <widget class="QWidget" name="AllTeamTrip"/>
      <widget class="QWidget" name="CustomTrip">
+      <widget class="QLabel" name="label_6">
+       <property name="geometry">
+        <rect>
+         <x>290</x>
+         <y>10</y>
+         <width>221</width>
+         <height>101</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Custom Trip</string>
+       </property>
+      </widget>
+      <widget class="QWidget" name="horizontalLayoutWidget_5">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>100</y>
+         <width>751</width>
+         <height>301</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QTableView" name="teamsCustomTableView"/>
+        </item>
+        <item>
+         <widget class="QTableView" name="customTripTableView_2"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="horizontalLayoutWidget_6">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>430</y>
+         <width>481</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
+         <widget class="QComboBox" name="customTeamsComboBox"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="addCustomTeamPushButton">
+          <property name="text">
+           <string>Add Team</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="calcCustomDistancePushButton">
+          <property name="text">
+           <string>Calculate Distance</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="AllTeamTrip"/>
+     <widget class="QWidget" name="UserOrderTrip">
       <widget class="QLabel" name="label_2">
        <property name="geometry">
         <rect>

@@ -463,7 +463,6 @@ class djAlgo :public initEdgeList, initVertexList
                     else {
                         stadium = getStadiumNameFromTeamName(team_names[i]);
                         DijkstraAlgo(stadium.toStdString());
-                        qDebug().noquote() << prevStadium;
                         prevStadium = getStadiumNameFromTeamName(team_names[i - 1]);
                         if (prevStadium == stadium) {
                             addQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
@@ -485,6 +484,103 @@ class djAlgo :public initEdgeList, initVertexList
                         addQuery->next();
                         }
                     }
+                }
+            }
+
+            void CalcTripDistance()
+            {
+                QString stadium;
+                QString compareStadium;
+                QString closestTeamName;
+                int distance = 0;
+                int temp = 0;
+                std::vector<QString> team_names;
+                QSqlDatabase myDb;
+
+                if(QSqlDatabase::contains("qt_sql_default_connection"))
+                {
+                    myDb = QSqlDatabase::database("qt_sql_default_connection");
+                }
+                else
+                {
+                    myDb = QSqlDatabase::addDatabase("QSQLITE");
+                }
+
+                if (myDb.open())
+                {
+                    qDebug().noquote() << "db found and open";
+                }
+                else
+                {
+                    qDebug().noquote() << "db not found";
+                }
+
+                QSqlQueryModel model;//model is readonly access to query results
+                QSqlQuery query(myDb);
+                QSqlQuery *addQuery = new QSqlQuery(myDb);
+                query.prepare("SELECT TeamName FROM CustomTrip");
+                query.exec();
+
+                while (query.next())
+                {
+                    team_names.push_back(query.value(0).toString());
+                }
+
+
+                int teamNum = team_names.size();
+
+
+                addQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
+                addQuery->bindValue(":teamname", team_names[0]);
+                addQuery->bindValue(":distance", 0);
+                addQuery->exec();
+                addQuery->next();
+                closestTeamName = team_names[0];
+
+                stadium = getStadiumNameFromTeamName(closestTeamName);
+                DijkstraAlgo(stadium.toStdString());
+
+                for (int n = 0; n < team_names.size(); n++) {
+                    if (closestTeamName == team_names[n]) {
+                        team_names.erase(team_names.begin() + n);
+                    }
+                }
+
+                while (teamNum - 1 > 0) {
+                    temp = 100000;
+                    for (int j = 0; j < team_names.size(); j++) {
+                        compareStadium = getStadiumNameFromTeamName(team_names[j]);
+
+                        if (compareStadium == getStadiumNameFromTeamName(closestTeamName)) {
+                            temp = 0;
+                            closestTeamName = team_names[j];
+                        }
+                        else {
+                            for (int k = 0; k < edgeCost.size(); k++) {
+                                if (compareStadium == QString::fromStdString(verticies[k].vertexName)) {
+                                    if (edgeCost[k] < temp) {
+                                        temp = edgeCost[k];
+                                        closestTeamName = team_names[j];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    distance += temp;
+                    addQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
+                    addQuery->bindValue(":teamname", closestTeamName);
+                    addQuery->bindValue(":distance", distance);
+                    addQuery->exec();
+                    addQuery->next();
+
+                    stadium = getStadiumNameFromTeamName(closestTeamName);
+                    DijkstraAlgo(stadium.toStdString());
+                    for (int n = 0; n < team_names.size(); n++) {
+                        if (closestTeamName == team_names[n]) {
+                            team_names.erase(team_names.begin() + n);
+                        }
+                    }
+                    teamNum--;
                 }
             }
 };
