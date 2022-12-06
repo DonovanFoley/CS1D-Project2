@@ -61,6 +61,10 @@ private slots:
 
     void on_totalSeatingCapacityPushButton_clicked();
 
+    void on_EditTableInfoPushButton_clicked();
+
+    void on_pushButton_8_clicked();
+
 private:
     Ui::adminwindow *ui;
     bool ifSanDiego = false;

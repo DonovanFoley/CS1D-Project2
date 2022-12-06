@@ -155,8 +155,11 @@ void tripselectwindow::on_DJSelectPushButton_clicked()
     QString stadium;
     int distance;
     QSqlQuery *addTeamQuery = new QSqlQuery(myDb);
+    QSqlQuery *deleteQuery = new QSqlQuery(myDb);
 
     team = ui->DJTeamsComboBox->currentText();
+
+    deleteQuery->exec("DELETE FROM FinalTrip");
 
     djAlgo performAlgo;
     performAlgo.DijkstraAlgo("Lambeau Field");
@@ -184,6 +187,8 @@ void tripselectwindow::on_DJSelectPushButton_clicked()
     addTeamQuery->bindValue(":distance", distance);
     addTeamQuery->exec();
     addTeamQuery->next();
+
+    ui->DJCostLabel->setText(QString::number(distance));
 
 }
 
@@ -279,5 +284,275 @@ void tripselectwindow::on_calcCustomDistancePushButton_clicked()
 
         djAlgo performAlgo;
         performAlgo.CalcTripDistance();
+}
+
+
+void tripselectwindow::on_BeginTripPushButton_clicked()
+{
+    QSqlQueryModel* teamModel = new QSqlQueryModel();
+    QSqlQueryModel* souvModel = new QSqlQueryModel();
+    QSqlQueryModel* distanceTableModel = new QSqlQueryModel();
+    QSqlQuery *addQuery = new QSqlQuery(myDb);
+    QSqlRecord record;
+    QSqlQuery query(myDb);
+    QSqlQuery queryStadName(myDb);
+    QSqlQuery souvQuery(myDb);
+    QSqlRecord startingSouvenir;
+
+    QString stadiumName;
+
+    query.exec("SELECT TeamName FROM CustomTrip");
+
+    teamModel->setQuery(std::move(query));
+    for(int i=0;i<teamModel->rowCount();i++)
+    {
+        record = teamModel->record(i);
+        ui->teamComboBox->addItem(record.value(0).toString());
+        queryStadName.prepare("SELECT StadiumName FROM TeamInformation WHERE TeamName = :team");
+        queryStadName.bindValue(":team", record.value(0).toString());
+        queryStadName.exec();
+        queryStadName.next();
+
+        stadiumName = queryStadName.value(0).toString();
+
+        addQuery->prepare("INSERT INTO totalAmountSpentForTeams(teamName, StadiumName, amountSpent, amountIfStadiumSame) VALUES (:team, :stad, :amount, :amountSame);");
+        addQuery->bindValue(":team", record.value(0).toString());
+        addQuery->bindValue(":stad", stadiumName);
+        addQuery->bindValue(":amount", 0.0);
+        addQuery->bindValue(":amountSame", 0.0);
+        addQuery->exec();
+    }
+
+    startingSouvenir = teamModel->record(0);
+    souvQuery.prepare("SELECT itemName FROM souvenirList WHERE teamName = :team");
+    souvQuery.bindValue(":team", startingSouvenir.value(0).toString());
+    souvQuery.exec();
+    souvModel->setQuery(std::move(souvQuery));
+
+    for (int i = 0; i < souvModel->rowCount(); i++)
+    {
+        record = souvModel->record(i);
+        ui->SouvenirComboBox->addItem(record.value(0).toString());
+    }
+
+    distanceTableModel->setQuery("SELECT * FROM FinalTrip");
+    ui->customTripDistanceTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->customTripDistanceTableView->setAlternatingRowColors(true);
+    ui->customTripDistanceTableView->setModel(distanceTableModel);
+
+    ui->tripStackedWidget->setCurrentIndex(5);
+
+
+}
+
+
+void tripselectwindow::on_pushButton_2_clicked() //frgot to rename but this is the change team souvenir button
+{
+    QString team;
+    QSqlQuery souvQuery(myDb);
+    QSqlQueryModel* souvModel = new QSqlQueryModel();
+    QSqlRecord record;
+
+    team = ui->teamComboBox->currentText();
+    ui->SouvenirComboBox->clear();
+
+    souvQuery.prepare("SELECT itemName FROM souvenirList WHERE teamName = :team");
+    souvQuery.bindValue(":team", team);
+    souvQuery.exec();
+    souvModel->setQuery(std::move(souvQuery));
+
+    for (int i = 0; i < souvModel->rowCount(); i++)
+    {
+        record = souvModel->record(i);
+        ui->SouvenirComboBox->addItem(record.value(0).toString());
+    }
+
+}
+
+
+void tripselectwindow::on_pushButton_3_clicked()
+{
+
+}
+
+void tripselectwindow::on_addSouvenirButton_clicked()
+{
+    QString item;
+    int itemQuantity;
+    double itemPrice;
+    double total;
+    QString team;
+    QString totalSaleString;
+    QString stadiumName;
+
+    team = ui->teamComboBox->currentText();
+    item = ui->SouvenirComboBox->currentText();
+    itemQuantity = ui->quantityLineEdit->text().toInt();
+
+    QSqlQuery *prepQuery = new QSqlQuery(myDb);
+    QSqlQuery *activeQuery = new QSqlQuery(myDb);
+    QSqlQuery *insertQuery = new QSqlQuery(myDb);
+    QSqlQuery *sameInsertQuery = new QSqlQuery(myDb);
+
+    QSqlQuery *totalSaleQuery = new QSqlQuery(myDb);
+    QSqlQueryModel* receiptQryModel = new QSqlQueryModel();
+    QSqlQueryModel* totalAmountSpentQryModel = new QSqlQueryModel();
+
+
+    prepQuery -> prepare("SELECT itemPrice, stadiumName FROM souvenirList WHERE itemName = :item AND teamName = :team");
+    prepQuery -> bindValue(":item", item);
+    prepQuery -> bindValue(":team", team);
+    prepQuery -> exec();
+    prepQuery -> next();
+
+    itemPrice = prepQuery->value(0).toDouble();
+    stadiumName = prepQuery->value(1).toString();
+    total = itemQuantity * itemPrice;
+
+    activeQuery->prepare("INSERT INTO teamrReceiptTable (teamName, stadiumName, itemName, itemQuantity, totalPurchasePrice) VALUES (:team, :stad, :item, :quantity, :totalSale);");
+    activeQuery->bindValue(":team", team);
+    activeQuery->bindValue(":stad", stadiumName);
+    activeQuery->bindValue(":item", item);
+    activeQuery->bindValue(":quantity", itemQuantity);
+    activeQuery->bindValue(":totalSale", total);
+    activeQuery->exec();
+    activeQuery->next();
+
+    insertQuery->prepare("UPDATE totalAmountSpentForTeams set amountSpent = round((SELECT  SUM(totalPurchasePrice) FROM teamrReceiptTable WHERE teamName = :team),2)  "
+                         "WHERE teamName = :team");
+    insertQuery->bindValue(":team", team);
+    insertQuery->exec();
+    insertQuery->next();
+
+
+    sameInsertQuery->prepare("UPDATE totalAmountSpentForTeams set amountIfStadiumSame = round((SELECT  SUM(amountSpent) FROM totalAmountSpentForTeams WHERE StadiumName = :stad),2) WHERE StadiumName = :stad");
+    sameInsertQuery->bindValue(":stad", stadiumName);
+    sameInsertQuery->exec();
+    sameInsertQuery->next();
+
+    totalSaleQuery->exec("SELECT ROUND((SUM(totalPurchasePrice)), 2) AS ROUNDVALUE FROM teamrReceiptTable");
+    totalSaleQuery->next();
+    totalSaleString = totalSaleQuery->value(0).toString();
+    totalSaleString = "Total Amount Spent: " + totalSaleString;
+
+    ui->totalAmountSpentLabel->setText(totalSaleString);
+
+    ui->receiptTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->receiptTableView->setAlternatingRowColors(true);
+
+    ui->totalSpentTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->totalSpentTableView->setAlternatingRowColors(true);
+
+    receiptQryModel->setQuery("SELECT * FROM teamrReceiptTable");
+    totalAmountSpentQryModel->setQuery("SELECT * FROM totalAmountSpentForTeams");
+
+    ui->receiptTableView->setModel(receiptQryModel);
+    ui->totalSpentTableView->setModel(totalAmountSpentQryModel);
+}
+
+
+void tripselectwindow::on_endTripPushButton_clicked()
+{
+    ui->tripStackedWidget->setCurrentIndex(0);
+   QSqlQuery *deleteQuery = new QSqlQuery(myDb);
+   QSqlQueryModel* receiptQryModel = new QSqlQueryModel();
+   QSqlQueryModel* totalAmountSpentQryModel = new QSqlQueryModel();
+
+   deleteQuery->exec("DELETE FROM teamrReceiptTable");
+   deleteQuery->exec("DELETE FROM totalAmountSpentForTeams");
+
+   deleteQuery->exec("DELETE FROM FinalTrip");
+   deleteQuery->exec("DELETE FROM CustomTrip");
+
+   ui->receiptTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+   ui->receiptTableView->setAlternatingRowColors(true);
+
+   ui->totalSpentTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+   ui->totalSpentTableView->setAlternatingRowColors(true);
+
+   receiptQryModel->setQuery("SELECT * FROM teamrReceiptTable");
+   totalAmountSpentQryModel->setQuery("SELECT * FROM totalAmountSpentForTeams");
+
+   ui->receiptTableView->setModel(receiptQryModel);
+   ui->totalSpentTableView->setModel(totalAmountSpentQryModel);
+
+   ui->SouvenirComboBox->clear();
+   ui->teamComboBox->clear();
+   ui->teamsComboBox->clear();
+   ui->customTeamsComboBox->clear();
+
+   ui->totalAmountSpentLabel->setText("");
+
+
+}
+
+
+void tripselectwindow::on_customTripBeginFastestPushButton_clicked()
+{
+    QSqlQueryModel* teamModel = new QSqlQueryModel();
+    QSqlQueryModel* souvModel = new QSqlQueryModel();
+    QSqlQueryModel* distanceTableModel = new QSqlQueryModel();
+    QSqlQuery *addQuery = new QSqlQuery(myDb);
+    QSqlRecord record;
+    QSqlQuery query(myDb);
+    QSqlQuery queryStadName(myDb);
+    QSqlQuery souvQuery(myDb);
+    QSqlRecord startingSouvenir;
+
+    QString stadiumName;
+
+    query.exec("SELECT TeamName FROM CustomTrip");
+
+    teamModel->setQuery(std::move(query));
+    for(int i=0;i<teamModel->rowCount();i++)
+    {
+        record = teamModel->record(i);
+        ui->teamComboBox->addItem(record.value(0).toString());
+        queryStadName.prepare("SELECT StadiumName FROM TeamInformation WHERE TeamName = :team");
+        queryStadName.bindValue(":team", record.value(0).toString());
+        queryStadName.exec();
+        queryStadName.next();
+
+        stadiumName = queryStadName.value(0).toString();
+
+        addQuery->prepare("INSERT INTO totalAmountSpentForTeams(teamName, StadiumName, amountSpent, amountIfStadiumSame) VALUES (:team, :stad, :amount, :amountSame);");
+        addQuery->bindValue(":team", record.value(0).toString());
+        addQuery->bindValue(":stad", stadiumName);
+        addQuery->bindValue(":amount", 0.0);
+        addQuery->bindValue(":amountSame", 0.0);
+        addQuery->exec();
+    }
+
+    startingSouvenir = teamModel->record(0);
+    souvQuery.prepare("SELECT itemName FROM souvenirList WHERE teamName = :team");
+    souvQuery.bindValue(":team", startingSouvenir.value(0).toString());
+    souvQuery.exec();
+    souvModel->setQuery(std::move(souvQuery));
+
+    for (int i = 0; i < souvModel->rowCount(); i++)
+    {
+        record = souvModel->record(i);
+        ui->SouvenirComboBox->addItem(record.value(0).toString());
+    }
+
+    distanceTableModel->setQuery("SELECT * FROM FinalTrip");
+    ui->customTripDistanceTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->customTripDistanceTableView->setAlternatingRowColors(true);
+    ui->customTripDistanceTableView->setModel(distanceTableModel);
+
+    ui->tripStackedWidget->setCurrentIndex(5);
+
+}
+
+
+void tripselectwindow::on_goBackPushButton_clicked()
+{
+    QSqlQuery *deleteQuery = new QSqlQuery(myDb);
+
+    ui->tripStackedWidget->setCurrentIndex(0);
+    ui->DJCostLabel->setText("");
+
+    deleteQuery->exec("DELETE FROM FinalTrip");
+
 }
 

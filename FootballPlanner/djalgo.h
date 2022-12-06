@@ -262,12 +262,12 @@ class djAlgo :public initEdgeList, initVertexList
                 {
                     if (verticies[i].vertexName == vertex)
                     {
-                        qDebug().noquote() << "added ";
+                        //qDebug().noquote() << "added ";
                         startingIndex = i;
                     }
                 }
 
-                qDebug().noquote() << startingIndex;
+                //qDebug().noquote() << startingIndex;
 
                 edgeCost[startingIndex] = 0;
                 edgeParents[startingIndex] = -1;
@@ -320,7 +320,7 @@ class djAlgo :public initEdgeList, initVertexList
             {
                 for (int i = 0; i < edgeCost.size(); i++)
                 {
-                    qDebug().noquote() << (QString::fromStdString(verticies[i].vertexName));
+                    //().noquote() << (QString::fromStdString(verticies[i].vertexName));
                     outputString.push_back(QString::fromStdString(verticies[i].vertexName));
                     costString.push_back(edgeCost[i]);
                 }
@@ -456,11 +456,13 @@ class djAlgo :public initEdgeList, initVertexList
                     if (i == 0) {
                         addQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
                         addQuery->bindValue(":teamname", team_names[i]);
+                        qDebug().noquote() << "COOLNANN" << team_names[i];
                         addQuery->bindValue(":distance", 0);
                         addQuery->exec();
                         addQuery->next();
                     }
                     else {
+                        qDebug().noquote() << "COOLNANN" << team_names[i];
                         stadium = getStadiumNameFromTeamName(team_names[i]);
                         DijkstraAlgo(stadium.toStdString());
                         prevStadium = getStadiumNameFromTeamName(team_names[i - 1]);
@@ -524,6 +526,7 @@ class djAlgo :public initEdgeList, initVertexList
                 while (query.next())
                 {
                     team_names.push_back(query.value(0).toString());
+                    qDebug().noquote() << " PLSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS " << query.value(0).toString();
                 }
 
 
@@ -536,8 +539,10 @@ class djAlgo :public initEdgeList, initVertexList
                 addQuery->exec();
                 addQuery->next();
                 closestTeamName = team_names[0];
+                qDebug().noquote() << "closet teamname starting: " << closestTeamName;
 
                 stadium = getStadiumNameFromTeamName(closestTeamName);
+                qDebug().noquote() << "stadium starting: " << stadium;
                 DijkstraAlgo(stadium.toStdString());
 
                 for (int n = 0; n < team_names.size(); n++) {
@@ -549,18 +554,29 @@ class djAlgo :public initEdgeList, initVertexList
                 while (teamNum - 1 > 0) {
                     temp = 100000;
                     for (int j = 0; j < team_names.size(); j++) {
+                        qDebug().noquote() << "team_names[j] giong into compare stadium: " << team_names[j];
+
                         compareStadium = getStadiumNameFromTeamName(team_names[j]);
+                        qDebug().noquote() << "comp stadium: " << compareStadium;
+                         qDebug().noquote() << "closet teamname stadium: " << closestTeamName;
 
                         if (compareStadium == getStadiumNameFromTeamName(closestTeamName)) {
                             temp = 0;
+                            qDebug().noquote() << "team_names[j] for closest teamname" << team_names[j];
                             closestTeamName = team_names[j];
                         }
                         else {
-                            for (int k = 0; k < edgeCost.size(); k++) {
-                                if (compareStadium == QString::fromStdString(verticies[k].vertexName)) {
-                                    if (edgeCost[k] < temp) {
+                            for (int k = 0; k < edgeCost.size(); k++)
+                            {
+                                qDebug().noquote() << " EDGE " << QString::fromStdString(verticies[k].vertexName);
+                                qDebug().noquote() << "compare stadium" << compareStadium;
+                                if (compareStadium == QString::fromStdString(verticies[k].vertexName))
+                                {
+                                    if (edgeCost[k] < temp)
+                                    {
                                         temp = edgeCost[k];
                                         closestTeamName = team_names[j];
+                                        qDebug().noquote() << "closet teamname forloop k: " << closestTeamName;
                                     }
                                 }
                             }
@@ -573,7 +589,9 @@ class djAlgo :public initEdgeList, initVertexList
                     addQuery->exec();
                     addQuery->next();
 
+                    qDebug().noquote() << "closet team name" << closestTeamName;
                     stadium = getStadiumNameFromTeamName(closestTeamName);
+                    qDebug().noquote() << "stadium" << stadium;
                     DijkstraAlgo(stadium.toStdString());
                     for (int n = 0; n < team_names.size(); n++) {
                         if (closestTeamName == team_names[n]) {
