@@ -187,3 +187,97 @@ void tripselectwindow::on_DJSelectPushButton_clicked()
 
 }
 
+
+void tripselectwindow::on_CustomPushButton_clicked()
+{
+    QSqlQueryModel model;
+    QSqlQuery query(myDb);
+    QSqlQuery tripQuery(myDb);
+
+    QSqlQueryModel* teamModel = new QSqlQueryModel();
+    QSqlQueryModel* teamPlanModel = new QSqlQueryModel();
+    QSqlQuery *deleteQuery = new QSqlQuery(myDb);
+
+    deleteQuery->exec("DELETE FROM CustomTrip");
+    deleteQuery->exec("DELETE FROM FinalTrip");
+
+    ui->teamsCustomTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->teamsCustomTableView->setAlternatingRowColors(true);
+    ui->customTripTableView_2->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->customTripTableView_2->setAlternatingRowColors(true);
+
+    query.exec("SELECT DISTINCT TeamName FROM TeamInformation");
+    tripQuery.exec("SELECT Team FROM CustomTrip");
+
+    teamModel->setQuery(std::move(query));
+    teamPlanModel->setQuery(std::move(tripQuery));
+
+    ui->teamsCustomTableView->setModel(teamModel);
+    ui->customTripTableView_2->setModel(teamPlanModel);
+
+
+    QSqlRecord record;
+    for(int i=0;i<teamModel->rowCount();i++)
+    {
+        record = teamModel->record(i);
+        ui->customTeamsComboBox->addItem(record.value(0).toString());
+    }
+
+
+    ui->tripStackedWidget->setCurrentIndex(2);
+    count = 1; //setting next city check to 1;
+    addTeam = 0;//resetting the addcity count;
+
+}
+
+
+void tripselectwindow::on_addCustomTeamPushButton_clicked()
+{
+    QString team;
+
+    QSqlQuery *addCityQuery = new QSqlQuery(myDb);
+    QSqlQueryModel* qryModel = new QSqlQueryModel();
+
+    if (ui->customTeamsComboBox->count() != 0)
+    {
+        team = ui->customTeamsComboBox->currentText();
+
+        addCityQuery->prepare("INSERT INTO CustomTrip (TeamName) VALUES (:team)");
+        addCityQuery->bindValue(":team", team);
+        addCityQuery->exec();
+
+        qryModel->setQuery("SELECT TeamName FROM CustomTrip");
+
+        ui->customTripTableView_2->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+        ui->customTripTableView_2->setAlternatingRowColors(true);
+        ui->customTripTableView_2->setModel(qryModel);
+
+        ui->customTeamsComboBox->removeItem(ui->customTeamsComboBox->currentIndex());
+        addTeam++;
+        //ui->customTripErrorLabel->setVisible(false);
+    }
+    else
+    {
+        //ui->customTripErrorLabel->setVisible(true);
+        //ui->customTripErrorLabel->setText("No More Cities to Add: Press Finalize Trip and Begin");
+    }
+}
+
+
+void tripselectwindow::on_calcCustomDistancePushButton_clicked()
+{
+    QSqlDatabase myDb;
+
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+        djAlgo performAlgo;
+        performAlgo.CalcTripDistance();
+}
+
