@@ -94,7 +94,7 @@
              <item>
               <widget class="QPushButton" name="stadiumNamesAndTeamsPushButton">
                <property name="text">
-                <string>Show Stadium Names and Teams</string>
+                <string>Show NFL Stadium Names and Teams</string>
                </property>
               </widget>
              </item>
@@ -120,9 +120,9 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_7">
+              <widget class="QPushButton" name="openRoofStadiumInfo">
                <property name="text">
-                <string>PushButton</string>
+                <string>Show Open Roof Stadium Info</string>
                </property>
               </widget>
              </item>
@@ -134,16 +134,16 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_9">
+              <widget class="QPushButton" name="nflSeatingCapacity">
                <property name="text">
-                <string>PushButton</string>
+                <string>Show NFL Stadiums And Total Seating Capacity</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_10">
+              <widget class="QPushButton" name="conferenceSort">
                <property name="text">
-                <string>PushButton</string>
+                <string>Show NFL Teams sorted By Conference Name</string>
                </property>
               </widget>
              </item>

@@ -326,3 +326,81 @@ void menuselectwindow::on_goBackSecondPushButton_2_clicked()
     ui->souvenirTableWidget->setColumnCount(0);
 }
 
+
+void menuselectwindow::on_openRoofStadiumInfo_clicked()
+{
+    QSqlDatabase myDb;
+
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+    QSqlQuery *prepQuery = new QSqlQuery(myDb);
+    QSqlQueryModel* qryModel = new QSqlQueryModel();
+
+    QSqlQuery *countQuery = new QSqlQuery(myDb);
+    QSqlQueryModel* countModel = new QSqlQueryModel();
+
+
+    prepQuery->prepare("SELECT TeamName, StadiumName, RoofType FROM TeamInformation WHERE RoofType = :type");
+    prepQuery->bindValue(":type", "Open");
+    prepQuery->exec();
+
+    countQuery->prepare("SELECT Distinct stadiumName, RoofType FROM TeamInformation WHERE RoofType = :type");
+    countQuery->bindValue(":type", "Open");
+    countQuery->exec();
+
+    qryModel->setQuery(std::move(*prepQuery));
+    countModel->setQuery(std::move(*countQuery));
+
+    int numOfOpen = countModel->rowCount();
+
+    ui->footBallTeamTableWidget->setModel(qryModel);
+    ui->filterLabel->setText("Number of Stadiums With Open Roof Type: " + QString::number(numOfOpen));
+
+    ui->mainMenuStackedWidget->setCurrentIndex(1);
+}
+
+
+void menuselectwindow::on_nflSeatingCapacity_clicked()
+{
+
+}
+
+
+void menuselectwindow::on_conferenceSort_clicked()
+{
+    QSqlDatabase myDb;
+
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+    QSqlQueryModel* qryModel = new QSqlQueryModel();
+    QSqlQuery *prepQuery = new QSqlQuery(myDb);
+
+    ui->mainMenuStackedWidget->setCurrentIndex(1);
+
+    ui->footBallTeamTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->footBallTeamTableWidget->setAlternatingRowColors(true);
+
+    prepQuery->prepare("SELECT TeamName, StadiumName, Division, Location, Conference FROM TeamInformation WHERE Conference = :conf ORDER BY Division ASC");
+    prepQuery->bindValue(":conf", "National Football Conference");
+    prepQuery->exec();
+
+    qryModel->setQuery(std::move(*prepQuery));
+    ui->footBallTeamTableWidget->setModel(qryModel);
+
+    ui->filterLabel->setText("Current Filter: Show NFL Teams Information Sorted by Conference Type");
+}
+

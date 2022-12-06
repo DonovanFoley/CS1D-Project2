@@ -41,6 +41,20 @@ private slots:
 
     void on_calcCustomDistancePushButton_clicked();
 
+    void on_BeginTripPushButton_clicked();
+
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_3_clicked();
+
+    void on_addSouvenirButton_clicked();
+
+    void on_endTripPushButton_clicked();
+
+    void on_customTripBeginFastestPushButton_clicked();
+
+    void on_goBackPushButton_clicked();
+
 private:
     Ui::tripselectwindow *ui;
 

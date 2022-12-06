@@ -227,6 +227,7 @@ void adminwindow::initStartingSouvenirs(QString fileName)
     }
 
     QString teamName;
+    QString stadiumName;
     QString itemName;
     double itemPrice;
     QSqlQueryModel* qryModel = new QSqlQueryModel();
@@ -234,14 +235,16 @@ void adminwindow::initStartingSouvenirs(QString fileName)
     while(!inFile.atEnd())
     {
         QSqlQuery query;
-        query.prepare("INSERT INTO souvenirList(teamName, itemName, itemPrice) "
-                      "VALUES (:team, :item, :price)");
+        query.prepare("INSERT INTO souvenirList(teamName, stadiumName, itemName, itemPrice) "
+                      "VALUES (:team, :stad, :item, :price)");
 
         teamName = inFile.readLine();
+        stadiumName = inFile.readLine();
         itemName = inFile.readLine();
         itemPrice = inFile.readLine().toDouble();
 
         query.bindValue(":team", teamName);
+        query.bindValue(":stad", stadiumName);
         query.bindValue(":item", itemName);
         query.bindValue(":price", itemPrice);
 
@@ -578,5 +581,57 @@ void adminwindow::on_totalSeatingCapacityPushButton_clicked()
     ui->adminFunctionLabel_2->setText("Current Function: Total NFL Seating Capacity");
 
     ui->adminStackedWidget->setCurrentIndex(4);
+}
+
+
+void adminwindow::on_EditTableInfoPushButton_clicked()
+{
+    QSqlDatabase myDb;
+
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+    QSqlQueryModel* qryModel = new QSqlQueryModel();
+    QSqlQueryModel* souvModel = new QSqlQueryModel();
+    QSqlQueryModel* teamModel = new QSqlQueryModel();
+    QSqlQuery query(myDb);
+    QSqlRecord record;
+
+    query.exec("SELECT DISTINCT TeamName FROM TeamInformation");
+    teamModel->setQuery(std::move(query));
+
+    for (int i = 0; i < teamModel -> rowCount(); i++)
+    {
+        record = teamModel->record(i);
+        ui->teamBox2->addItem(record.value(0).toString());
+        ui->teamBox1->addItem(record.value(0).toString());
+    }
+
+    ui->teamTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->teamTable->setAlternatingRowColors(true);
+
+    ui->souvTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->souvTable->setAlternatingRowColors(true);
+
+    qryModel->setQuery("SELECT * FROM TeamInformation");
+    ui->teamTable->setModel(qryModel);
+
+    souvModel->setQuery("SELECT * FROM souvenirList");
+    ui->souvTable->setModel(souvModel);
+
+    ui->adminStackedWidget->setCurrentIndex(5);
+}
+
+
+void adminwindow::on_pushButton_8_clicked()
+{
+    ui->adminStackedWidget->setCurrentIndex(1);
+    ui->teamBox1->clear();
+    ui->teamBox2->clear();
 }
 

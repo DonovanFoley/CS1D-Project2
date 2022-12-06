@@ -51,6 +51,12 @@ private slots:
 
     void on_goBackSecondPushButton_2_clicked();
 
+    void on_openRoofStadiumInfo_clicked();
+
+    void on_nflSeatingCapacity_clicked();
+
+    void on_conferenceSort_clicked();
+
 private:
     Ui::menuselectwindow *ui;
     QSqlDatabase myDb;
