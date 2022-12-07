@@ -458,3 +458,9 @@ void menuselectwindow::on_conferenceSort_clicked()
     ui->filterLabel->setText("Current Filter: Show NFL Teams Information Sorted by Conference Type");
 }
 
+
+void menuselectwindow::on_mainWindowButton_clicked()
+{
+    emit goBackToMenu();
+}
+

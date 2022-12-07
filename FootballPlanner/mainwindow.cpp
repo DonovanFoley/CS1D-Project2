@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&mainMenu, SIGNAL(goToAdminPage()), this, SLOT(moveAdminPage()));
 
     connect(&menuSelectWindow, SIGNAL(goToCustomTripPage()), this, SLOT(moveTripSelectWindow()));
+    connect(&menuSelectWindow, SIGNAL(goBackToMenu()), this, SLOT(moveBackToMain()));
 
     connect(&tripSelectWindow, SIGNAL(goToMainSelectWindow()), this, SLOT (moveMenuSelectPage()));
     connect(&adminWindow, SIGNAL(goToMainSelectWindow()), this, SLOT (moveMenuSelectPageAdmin()));
@@ -34,6 +35,10 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::moveBackToMain() {
+    ui->appStackedWidget->setCurrentIndex(3);
 }
 
 void MainWindow::moveAdminPage()

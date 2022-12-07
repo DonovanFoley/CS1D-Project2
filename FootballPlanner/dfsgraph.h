@@ -1,3 +1,11 @@
+/*****************************************************************//**
+ * \file   dfsgraph.h
+ * \brief  class to perform dfs on NFL team stadiums
+ * 
+ * \author Admin
+ * \date   December 2022
+ *********************************************************************/
+
 #ifndef DFSGRAPH_H
 #define DFSGRAPH_H
 

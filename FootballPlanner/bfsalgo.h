@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   bfsalgo.h
+ * \brief  class to perfrom bfs on NFL teams
+ * 
+ * \date   December 2022
+ *********************************************************************/
+
 #ifndef BFSALGO_H
 #define BFSALGO_H
 

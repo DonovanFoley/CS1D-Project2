@@ -1,3 +1,11 @@
+/*****************************************************************//**
+ * \file   djalgo.h
+ * \brief  Dijkstra algorithm class to calculate shortest routs for
+ *          trips
+ * 
+ * \date   December 2022
+ *********************************************************************/
+
 #ifndef DJALGO_H
 #define DJALGO_H
 

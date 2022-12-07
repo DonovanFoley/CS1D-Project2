@@ -1,3 +1,12 @@
+/*****************************************************************//**
+ * \file   menuselectwindow.h
+ * \brief  ui that allows user to display information about the
+ *          teams
+ * 
+ * \author Admin
+ * \date   December 2022
+ *********************************************************************/
+
 #ifndef MENUSELECTWINDOW_H
 #define MENUSELECTWINDOW_H
 
@@ -22,6 +31,7 @@ public:
 
        signals:
             void goToCustomTripPage();
+            void goBackToMenu();
 private slots:
     void on_nflTeamsPushButton_clicked();
 
@@ -56,6 +66,8 @@ private slots:
     void on_nflSeatingCapacity_clicked();
 
     void on_conferenceSort_clicked();
+
+    void on_mainWindowButton_clicked();
 
 private:
     Ui::menuselectwindow *ui;

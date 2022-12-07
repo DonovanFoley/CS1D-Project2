@@ -55,6 +55,11 @@
              </item>
              <item>
               <widget class="QLabel" name="label">
+               <property name="font">
+                <font>
+                 <pointsize>20</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>WELCOME</string>
                </property>
@@ -158,6 +163,13 @@
               <widget class="QPushButton" name="customTripPushButton">
                <property name="text">
                 <string>Plan a Custom Trip</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="mainWindowButton">
+               <property name="text">
+                <string>Main Menu</string>
                </property>
               </widget>
              </item>

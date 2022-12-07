@@ -17,7 +17,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="adminStackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_7">
@@ -572,23 +572,10 @@
      </widget>
      <widget class="QWidget" name="page_5">
       <layout class="QGridLayout" name="gridLayout_5">
-       <item row="3" column="0">
-        <spacer name="horizontalSpacer_17">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="6" column="0">
+       <item row="6" column="1">
         <widget class="QTableView" name="adminTableView"/>
        </item>
-       <item row="1" column="0">
+       <item row="1" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_11">
          <item>
           <spacer name="horizontalSpacer_13">
@@ -628,7 +615,31 @@
          </item>
         </layout>
        </item>
-       <item row="2" column="0">
+       <item row="0" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <item>
+          <spacer name="horizontalSpacer_12">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="goBackAdmin4">
+           <property name="text">
+            <string>Go Back</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_12">
          <item>
           <spacer name="horizontalSpacer_15">
@@ -668,36 +679,36 @@
          </item>
         </layout>
        </item>
-       <item row="0" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_10">
+       <item row="3" column="1">
+        <spacer name="horizontalSpacer_17">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="4" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_14">
          <item>
-          <spacer name="horizontalSpacer_12">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+          <widget class="QLabel" name="adminLabel">
+           <property name="text">
+            <string>TEST</string>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
+          </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="goBackAdmin4">
+          <widget class="QLabel" name="allSeatLabel">
            <property name="text">
-            <string>Go Back</string>
+            <string>TextLabel</string>
            </property>
           </widget>
          </item>
         </layout>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="adminLabel">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>

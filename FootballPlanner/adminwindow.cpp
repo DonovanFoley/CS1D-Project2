@@ -600,6 +600,13 @@ void adminwindow::on_totalSeatingCapacityPushButton_clicked()
     QString label = QString::fromStdString("Total Seating Capacity: ") + QString::number(totalCapacity);
     ui->adminLabel->setText(label);
 
+    query.prepare("SELECT DISTINCT TeamName, StadiumName, SUM(SeatingCapacity) FROM TeamInformation");
+    query.exec();
+    query.next();
+    QString num = QString::number(query.value(2).toInt());
+    QString allLabel = QString::fromStdString("Total Seating Capacity: ") + num;
+    ui->allSeatLabel->setText(allLabel);
+
     ui->adminFunctionLabel_2->setText("Current Function: Total NFL Seating Capacity");
     ui->adminStackedWidget->setCurrentIndex(4);
 

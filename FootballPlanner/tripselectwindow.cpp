@@ -133,7 +133,10 @@ void tripselectwindow::on_DJPushButton_clicked()
     deleteQuery->exec("DELETE FROM CustomTrip");
     deleteQuery->exec("DELETE FROM FinalTrip");
 
-    query.exec("SELECT DISTINCT TeamName FROM TeamInformation");
+    query.prepare("SELECT DISTINCT TeamName FROM TeamInformation WHERE TeamName != (:team)");
+    query.bindValue(":team", "Green Bay Packers");
+    query.exec();
+    query.next();
 
     teamModel->setQuery(std::move(query));
 
@@ -160,9 +163,15 @@ void tripselectwindow::on_DJSelectPushButton_clicked()
     team = ui->DJTeamsComboBox->currentText();
 
     deleteQuery->exec("DELETE FROM FinalTrip");
+    deleteQuery->exec("DELETE FROM CustomTrip");
 
     djAlgo performAlgo;
     performAlgo.DijkstraAlgo("Lambeau Field");
+
+    addTeamQuery->prepare("INSERT INTO CustomTrip VALUES (:teamname)");
+    addTeamQuery->bindValue(":teamname", "Green Bay Packers");
+    addTeamQuery->exec();
+    addTeamQuery->next();
 
     addTeamQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
     addTeamQuery->bindValue(":teamname", "Green Bay Packers");
@@ -182,13 +191,17 @@ void tripselectwindow::on_DJSelectPushButton_clicked()
         }
     }
 
+    addTeamQuery->prepare("INSERT INTO CustomTrip VALUES (:teamname)");
+    addTeamQuery->bindValue(":teamname", team);
+    addTeamQuery->exec();
+    addTeamQuery->next();
+
     addTeamQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
     addTeamQuery->bindValue(":teamname", team);
     addTeamQuery->bindValue(":distance", distance);
     addTeamQuery->exec();
     addTeamQuery->next();
 
-    ui->DJCostLabel->setText(QString::number(distance));
 
 }
 
@@ -576,7 +589,6 @@ void tripselectwindow::on_goBackPushButton_clicked()
     QSqlQuery *deleteQuery = new QSqlQuery(myDb);
 
     ui->tripStackedWidget->setCurrentIndex(0);
-    ui->DJCostLabel->setText("");
 
     deleteQuery->exec("DELETE FROM FinalTrip");
 
@@ -636,6 +648,63 @@ void tripselectwindow::on_AllTeamBeginPushButton_clicked()
 
 
 void tripselectwindow::on_pushButton_clicked()
+{
+    QSqlQueryModel* teamModel = new QSqlQueryModel();
+    QSqlQueryModel* souvModel = new QSqlQueryModel();
+    QSqlQueryModel* distanceTableModel = new QSqlQueryModel();
+    QSqlQuery *addQuery = new QSqlQuery(myDb);
+    QSqlRecord record;
+    QSqlQuery query(myDb);
+    QSqlQuery queryStadName(myDb);
+    QSqlQuery souvQuery(myDb);
+    QSqlRecord startingSouvenir;
+
+    QString stadiumName;
+
+    query.exec("SELECT TeamName FROM CustomTrip");
+
+    teamModel->setQuery(std::move(query));
+    for(int i=0;i<teamModel->rowCount();i++)
+    {
+        record = teamModel->record(i);
+        ui->teamComboBox->addItem(record.value(0).toString());
+        queryStadName.prepare("SELECT StadiumName FROM TeamInformation WHERE TeamName = :team");
+        queryStadName.bindValue(":team", record.value(0).toString());
+        queryStadName.exec();
+        queryStadName.next();
+
+        stadiumName = queryStadName.value(0).toString();
+
+        addQuery->prepare("INSERT INTO totalAmountSpentForTeams(teamName, StadiumName, amountSpent, amountIfStadiumSame) VALUES (:team, :stad, :amount, :amountSame);");
+        addQuery->bindValue(":team", record.value(0).toString());
+        addQuery->bindValue(":stad", stadiumName);
+        addQuery->bindValue(":amount", 0.0);
+        addQuery->bindValue(":amountSame", 0.0);
+        addQuery->exec();
+    }
+
+    startingSouvenir = teamModel->record(0);
+    souvQuery.prepare("SELECT itemName FROM souvenirList WHERE teamName = :team");
+    souvQuery.bindValue(":team", startingSouvenir.value(0).toString());
+    souvQuery.exec();
+    souvModel->setQuery(std::move(souvQuery));
+
+    for (int i = 0; i < souvModel->rowCount(); i++)
+    {
+        record = souvModel->record(i);
+        ui->SouvenirComboBox->addItem(record.value(0).toString());
+    }
+
+    distanceTableModel->setQuery("SELECT * FROM FinalTrip");
+    ui->customTripDistanceTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->customTripDistanceTableView->setAlternatingRowColors(true);
+    ui->customTripDistanceTableView->setModel(distanceTableModel);
+
+    ui->tripStackedWidget->setCurrentIndex(5);
+}
+
+
+void tripselectwindow::on_DJBeginTripButton_clicked()
 {
     QSqlQueryModel* teamModel = new QSqlQueryModel();
     QSqlQueryModel* souvModel = new QSqlQueryModel();
