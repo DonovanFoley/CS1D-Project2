@@ -545,6 +545,10 @@ void adminwindow::on_goBackAdmin4_clicked()
 
 void adminwindow::on_totalSeatingCapacityPushButton_clicked()
 {
+    std::vector<int> seatingCapacities;
+    std::vector<QString> stadiums;
+    int totalCapacity = 0;
+    QString prevStadium = "";
     QSqlDatabase myDb;
 
     if(QSqlDatabase::contains("qt_sql_default_connection"))
@@ -557,30 +561,48 @@ void adminwindow::on_totalSeatingCapacityPushButton_clicked()
     }
 
     QSqlQueryModel* qryModel = new QSqlQueryModel();
+    QSqlQuery *prepQuery = new QSqlQuery(myDb);
     QSqlQuery query(myDb);
-    QSqlQuery querySum(myDb);
 
-    ui->adminTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->adminTableView->horizontalHeader()->setAlternatingRowColors(true);
-
-    query.prepare("SELECT DISTINCT TeamName, StadiumName, SeatingCapacity FROM TeamInformation WHERE Conference = :conf");
-    query.bindValue(":conf", "National Football Conference");
+    query.prepare("SELECT SeatingCapacity FROM TeamInformation ORDER BY SeatingCapacity ASC");
     query.exec();
 
-    querySum.prepare("SELECT DISTINCT TeamName, StadiumName, SUM(SeatingCapacity) FROM TeamInformation WHERE Conference = :conf");
-    querySum.bindValue(":conf", "National Football Conference");
-    querySum.exec();
-    querySum.next();
+    while (query.next())
+    {
+        seatingCapacities.push_back(query.value(0).toInt());
+    }
 
-    QString num = QString::number(querySum.value(2).toInt());
+    query.prepare("SELECT StadiumName FROM TeamInformation ORDER BY SeatingCapacity ASC");
+    query.exec();
 
-    qryModel->setQuery(std::move(query));
+    while (query.next())
+    {
+        stadiums.push_back(query.value(0).toString());
+    }
+
+
+    ui->adminTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->adminTableView->setAlternatingRowColors(true);
+
+    prepQuery->prepare("SELECT TeamName, stadiumName, SeatingCapacity FROM TeamInformation ORDER BY SeatingCapacity ASC");
+    prepQuery->exec();
+
+    qryModel->setQuery(std::move(*prepQuery));
     ui->adminTableView->setModel(qryModel);
 
-    ui->adminLabel->setText("Total Capacity:  " + num);
-    ui->adminFunctionLabel_2->setText("Current Function: Total NFL Seating Capacity");
+    for (int i = 0; i < seatingCapacities.size(); i++) {
+        totalCapacity += seatingCapacities[i];
+        if (prevStadium == stadiums[i]) {
+            totalCapacity -= seatingCapacities[i];
+        }
+        prevStadium = stadiums[i];
+    }
+    QString label = QString::fromStdString("Total Seating Capacity: ") + QString::number(totalCapacity);
+    ui->adminLabel->setText(label);
 
+    ui->adminFunctionLabel_2->setText("Current Function: Total NFL Seating Capacity");
     ui->adminStackedWidget->setCurrentIndex(4);
+
 }
 
 
@@ -633,5 +655,390 @@ void adminwindow::on_pushButton_8_clicked()
     ui->adminStackedWidget->setCurrentIndex(1);
     ui->teamBox1->clear();
     ui->teamBox2->clear();
+    ui->errorLabelCapacity->setText("");
+    ui->errorLabelCapacity_2->setText("");
+}
+
+
+void adminwindow::on_modifyTeamInfoPushButton_clicked()
+{
+    QSqlDatabase myDb;
+
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+    QString teamName;
+    QString stadiumName;
+    int seatingQuantity;
+    string quantityString;
+    bool isInt = false;
+
+    teamName = ui->teamBox1->currentText();
+    stadiumName = ui->modifyLineEdit->text();
+    seatingQuantity = ui->capacityModify->text().toInt();
+    quantityString = ui->capacityModify->text().toStdString();
+
+    if (stadiumName == "" || quantityString == "")
+    {
+        ui->errorLabelCapacity->setText("ERROR: One of your fields is Empty");
+    }
+    else
+    {
+        for (char const ch : quantityString)
+        {
+            if (std::isdigit(ch))
+            {
+                isInt = true;
+            }
+            else
+            {
+                isInt = false;
+            }
+        }
+
+        if(isInt == true)
+        {
+            qDebug().noquote() << "in if";
+            QSqlQuery query;
+            QSqlQuery souvQry;
+
+            QSqlQueryModel* queryModel = new QSqlQueryModel();
+
+            query.prepare("UPDATE TeamInformation SET SeatingCapacity = :cap, StadiumName = :newName WHERE TeamName = :team");
+            query.bindValue(":cap", seatingQuantity);
+            query.bindValue(":newName", stadiumName);
+            query.bindValue(":team", teamName);
+            query.exec();
+
+            souvQry.prepare("UPDATE souvenirList SET stadiumName = :stad WHERE TeamName = :team");
+            souvQry.bindValue(":stad", stadiumName);
+            souvQry.bindValue(":team", teamName);
+            souvQry.exec();
+
+            ui->teamTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+            ui->teamTable->setAlternatingRowColors(true);
+
+            ui->errorLabelCapacity->setText("");
+
+            queryModel->setQuery("SELECT * FROM TeamInformation");
+            ui->teamTable->setModel(queryModel);
+
+        }
+        else
+        {
+            ui->errorLabelCapacity->setText("NOT AN INT! Enter an integer into Stadium Info");
+        }
+    }
+}
+
+
+void adminwindow::on_editSouvenirButton_clicked()
+{
+    QSqlDatabase myDb;
+
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+    QString teamName;
+    QString newSouvItem;
+    double priceItem;
+    string quantityString;
+    bool isDouble = false;
+    bool itemExist = false;
+    QSqlRecord test;
+
+    teamName = ui->teamBox2->currentText();
+    newSouvItem = ui->newSouvItem->text();
+    priceItem = ui->priceItem->text().toDouble();
+    quantityString = ui->priceItem->text().toStdString();
+
+    if (newSouvItem == "" || quantityString == "")
+    {
+        ui->errorLabel->setText("ERROR: One of your fields is Empty");
+    }
+    else
+    {
+        for (char const ch : quantityString)
+        {
+            if (std::isdigit(ch))
+            {
+                isDouble = true;
+            }
+            else
+            {
+                isDouble = false;
+            }
+        }
+
+        if(isDouble == true)
+        {
+            QSqlQuery searchQuery;
+            QSqlQuery query;
+
+            QSqlQueryModel* souvModel = new QSqlQueryModel();
+            QSqlQueryModel* searchModel = new QSqlQueryModel();
+            searchQuery.prepare("SELECT itemName FROM souvenirList WHERE itemName = :itemName");
+            searchQuery.bindValue(":itemName", newSouvItem);
+            searchQuery.exec();
+            searchModel->setQuery(std::move(searchQuery));
+            int i = 0;
+            while (i < searchModel->rowCount() && !itemExist)
+            {
+                test = searchModel->record(i);
+                if (newSouvItem == test.value(0).toString())
+                {
+                      itemExist = true;
+                }
+                i++;
+            }
+
+            if (itemExist == true)
+            {
+                query.prepare("UPDATE souvenirList SET itemPrice = :price WHERE itemName = :item AND teamName = :team");
+                query.bindValue(":price", priceItem);
+                query.bindValue(":item", newSouvItem);
+                query.bindValue(":team", teamName);
+                query.exec();
+
+                ui->souvTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+                ui->souvTable->setAlternatingRowColors(true);
+
+                ui->errorLabel->setText("");
+
+                souvModel->setQuery("SELECT * FROM souvenirList");
+                ui->souvTable->setModel(souvModel);
+            }
+            else
+            {
+                ui->errorLabel->setText("ITEM DOESNT EXISTS! Enter a Valid Item");
+            }
+
+        }
+        else
+        {
+            ui->errorLabel->setText("NOT AN DOUBLE! Enter a Double Into Item Price");
+        }
+    }
+}
+
+
+void adminwindow::on_pushButton_10_clicked()
+{
+
+}
+
+
+void adminwindow::on_EditSouvButton_clicked()
+{
+    QSqlDatabase myDb;
+
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+    QSqlQueryModel* souvModel = new QSqlQueryModel();
+    QSqlQueryModel* teamModel = new QSqlQueryModel();
+    QSqlQuery query(myDb);
+    QSqlRecord record;
+
+    query.exec("SELECT DISTINCT TeamName FROM TeamInformation");
+    teamModel->setQuery(std::move(query));
+
+    for (int i = 0; i < teamModel -> rowCount(); i++)
+    {
+        record = teamModel->record(i);
+        ui->teamBox2->addItem(record.value(0).toString());
+    }
+
+    ui->souvTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->souvTable->setAlternatingRowColors(true);
+
+    souvModel->setQuery("SELECT * FROM souvenirList");
+    ui->souvTable->setModel(souvModel);
+
+    ui->adminStackedWidget->setCurrentIndex(6);
+}
+
+
+void adminwindow::on_goBackSouvenir_clicked()
+{
+    ui->adminStackedWidget->setCurrentIndex(1);
+    ui->teamBox1->clear();
+    ui->teamBox2->clear();
+    ui->errorLabelCapacity->setText("");
+    ui->errorLabelCapacity_2->setText("");
+}
+
+
+void adminwindow::on_addSouvButton_clicked()
+{
+    QSqlDatabase myDb;
+
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+    QString teamName;
+    QString newSouvItem;
+    QString stadName;
+    double priceItem;
+    string quantityString;
+    bool isDouble = false;
+
+    teamName = ui->teamBox2->currentText();
+    newSouvItem = ui->newSouvItem->text();
+    priceItem = ui->priceItem->text().toDouble();
+    quantityString = ui->priceItem->text().toStdString();
+
+    if (newSouvItem == "" || quantityString == "")
+    {
+        ui->errorLabel->setText("ERROR: One of your fields is Empty");
+    }
+    else
+    {
+        for (char const ch : quantityString)
+        {
+            if (std::isdigit(ch))
+            {
+                isDouble = true;
+            }
+            else
+            {
+                isDouble = false;
+            }
+        }
+
+        if(isDouble == true)
+        {
+            QSqlQuery query;
+            QSqlQuery stadQuery;
+
+            QSqlQueryModel* souvModel = new QSqlQueryModel();
+
+            stadQuery.prepare("SELECT StadiumName FROM TeamInformation WHERE TeamName = :team");
+            stadQuery.bindValue(":team", teamName);
+            stadQuery.exec();
+            stadQuery.next();
+
+            stadName = stadQuery.value(0).toString();
+
+            query.prepare("INSERT INTO souvenirList(teamName, stadiumName, itemName, itemPrice) VALUES (:team, :stad, :item, :price)");
+            query.bindValue(":price", priceItem);
+            query.bindValue(":item", newSouvItem);
+            query.bindValue(":team", teamName);
+            query.bindValue(":stad", stadName);
+            query.exec();
+
+            ui->souvTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+            ui->souvTable->setAlternatingRowColors(true);
+
+            ui->errorLabel->setText("");
+
+            souvModel->setQuery("SELECT * FROM souvenirList ORDER BY teamName ASC");
+            ui->souvTable->setModel(souvModel);
+        }
+        else
+        {
+            ui->errorLabel->setText("NOT AN DOUBLE! Enter a Double Into Item Price");
+        }
+    }
+}
+
+
+void adminwindow::on_deleteSouvButton_clicked()
+{
+    QSqlDatabase myDb;
+
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+    QString teamName;
+    QString newSouvItem;
+    double priceItem;
+    string quantityString;
+    bool isDouble = false;
+    bool itemExist = false;
+    QSqlRecord test;
+
+    teamName = ui->teamBox2->currentText();
+    newSouvItem = ui->newSouvItem->text();
+    priceItem = ui->priceItem->text().toDouble();
+    quantityString = ui->priceItem->text().toStdString();
+
+    if (newSouvItem == "")
+    {
+        ui->errorLabel->setText("ERROR: Enter an item");
+    }
+    else
+    {
+
+        QSqlQuery searchQuery;
+        QSqlQuery query;
+
+        QSqlQueryModel* souvModel = new QSqlQueryModel();
+        QSqlQueryModel* searchModel = new QSqlQueryModel();
+        searchQuery.prepare("SELECT itemName FROM souvenirList WHERE itemName = :itemName");
+        searchQuery.bindValue(":itemName", newSouvItem);
+        searchQuery.exec();
+        searchModel->setQuery(std::move(searchQuery));
+        int i = 0;
+        while (i < searchModel->rowCount() && !itemExist)
+        {
+            test = searchModel->record(i);
+            if (newSouvItem == test.value(0).toString())
+            {
+                  itemExist = true;
+            }
+            i++;
+        }
+
+        if (itemExist == true)
+        {
+            query.prepare("DELETE FROM souvenirList WHERE itemName = :item AND teamName = :team");
+            query.bindValue(":item", newSouvItem);
+            query.bindValue(":team", teamName);
+            query.exec();
+
+            ui->souvTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+            ui->souvTable->setAlternatingRowColors(true);
+
+            ui->errorLabel->setText("");
+
+            souvModel->setQuery("SELECT * FROM souvenirList");
+            ui->souvTable->setModel(souvModel);
+        }
+        else
+        {
+            ui->errorLabel->setText("ITEM DOESNT EXISTS! Enter a Valid Item");
+        }
+
+    }
 }
 

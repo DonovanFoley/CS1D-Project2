@@ -65,6 +65,20 @@ private slots:
 
     void on_pushButton_8_clicked();
 
+    void on_modifyTeamInfoPushButton_clicked();
+
+    void on_editSouvenirButton_clicked();
+
+    void on_pushButton_10_clicked();
+
+    void on_EditSouvButton_clicked();
+
+    void on_goBackSouvenir_clicked();
+
+    void on_addSouvButton_clicked();
+
+    void on_deleteSouvButton_clicked();
+
 private:
     Ui::adminwindow *ui;
     bool ifSanDiego = false;
