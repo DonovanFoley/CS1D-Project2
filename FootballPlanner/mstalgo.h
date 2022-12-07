@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   mstalgo.h
+ * \brief  class to show the mst for the stadium locations
+ * 
+ * \date   December 2022
+ *********************************************************************/
+
 #ifndef MSTALGO_H
 #define MSTALGO_H
 

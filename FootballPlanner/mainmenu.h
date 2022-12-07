@@ -1,3 +1,11 @@
+/*****************************************************************//**
+ * \file   mainmenu.h
+ * \brief  main menu displayed to the user
+ * 
+ * \author Admin
+ * \date   December 2022
+ *********************************************************************/
+
 #ifndef MAINMENU_H
 #define MAINMENU_H
 

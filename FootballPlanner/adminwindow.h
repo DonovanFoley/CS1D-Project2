@@ -1,3 +1,11 @@
+/*****************************************************************//**
+ * \file   adminwindow.h
+ * \brief  ui to allow admin to login and edit data
+ * 
+ * \author Admin
+ * \date   December 2022
+ *********************************************************************/
+
 #ifndef ADMINWINDOW_H
 #define ADMINWINDOW_H
 

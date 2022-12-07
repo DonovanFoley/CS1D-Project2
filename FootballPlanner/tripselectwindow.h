@@ -1,3 +1,11 @@
+/*****************************************************************//**
+ * \file   tripselectwindow.h
+ * \brief  ui to allow user to select the type of trip they wish to
+ *          go on
+ * 
+ * \date   December 2022
+ *********************************************************************/
+
 #ifndef TRIPSELECTWINDOW_H
 #define TRIPSELECTWINDOW_H
 
@@ -60,6 +68,8 @@ private slots:
     void on_AllTeamBeginPushButton_clicked();
 
     void on_pushButton_clicked();
+
+    void on_DJBeginTripButton_clicked();
 
 private:
     Ui::tripselectwindow *ui;

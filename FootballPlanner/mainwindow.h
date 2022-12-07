@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   mainwindow.h
+ * \brief  ui for the first main window displayed to the user
+ * 
+ * \date   December 2022
+ *********************************************************************/
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -29,6 +36,7 @@ private slots:
         void moveMenuSelectPage();
         void moveMenuSelectPageAdmin();
         void moveTripSelectWindow();
+        void moveBackToMain();
 
 private:
     Ui::MainWindow *ui;

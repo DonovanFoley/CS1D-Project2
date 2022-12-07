@@ -1,3 +1,11 @@
+/*****************************************************************//**
+ * \file   mapsouvenir.h
+ * \brief  This header contains the map for the souvenirs for each 
+ *          team
+ * 
+ * \date   December 2022
+ *********************************************************************/
+
 #ifndef MAPSOUVENIR_H
 #define MAPSOUVENIR_H
 
@@ -21,7 +29,7 @@ class item
       QString name;
       double price;
 
-
+      
       item(QString itemName, double itemPrice);
       item();
       void setItem(QString itemName, double itemPrice);
