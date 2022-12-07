@@ -384,70 +384,96 @@ void tripselectwindow::on_addSouvenirButton_clicked()
     QString team;
     QString totalSaleString;
     QString stadiumName;
+    string quantityString;
+    bool isInt = false;
+    //errorCheck
 
     team = ui->teamComboBox->currentText();
     item = ui->SouvenirComboBox->currentText();
     itemQuantity = ui->quantityLineEdit->text().toInt();
+    quantityString = ui->quantityLineEdit->text().toStdString();
 
-    QSqlQuery *prepQuery = new QSqlQuery(myDb);
-    QSqlQuery *activeQuery = new QSqlQuery(myDb);
-    QSqlQuery *insertQuery = new QSqlQuery(myDb);
-    QSqlQuery *sameInsertQuery = new QSqlQuery(myDb);
+    for (char const ch : quantityString)
+    {
+        if (std::isdigit(ch))
+        {
+            isInt = true;
+        }
+        else
+        {
+            isInt = false;
+        }
+    }
 
-    QSqlQuery *totalSaleQuery = new QSqlQuery(myDb);
-    QSqlQueryModel* receiptQryModel = new QSqlQueryModel();
-    QSqlQueryModel* totalAmountSpentQryModel = new QSqlQueryModel();
+    if (isInt == true)
+    {
 
+        QSqlQuery *prepQuery = new QSqlQuery(myDb);
+        QSqlQuery *activeQuery = new QSqlQuery(myDb);
+        QSqlQuery *insertQuery = new QSqlQuery(myDb);
+        QSqlQuery *sameInsertQuery = new QSqlQuery(myDb);
 
-    prepQuery -> prepare("SELECT itemPrice, stadiumName FROM souvenirList WHERE itemName = :item AND teamName = :team");
-    prepQuery -> bindValue(":item", item);
-    prepQuery -> bindValue(":team", team);
-    prepQuery -> exec();
-    prepQuery -> next();
-
-    itemPrice = prepQuery->value(0).toDouble();
-    stadiumName = prepQuery->value(1).toString();
-    total = itemQuantity * itemPrice;
-
-    activeQuery->prepare("INSERT INTO teamrReceiptTable (teamName, stadiumName, itemName, itemQuantity, totalPurchasePrice) VALUES (:team, :stad, :item, :quantity, :totalSale);");
-    activeQuery->bindValue(":team", team);
-    activeQuery->bindValue(":stad", stadiumName);
-    activeQuery->bindValue(":item", item);
-    activeQuery->bindValue(":quantity", itemQuantity);
-    activeQuery->bindValue(":totalSale", total);
-    activeQuery->exec();
-    activeQuery->next();
-
-    insertQuery->prepare("UPDATE totalAmountSpentForTeams set amountSpent = round((SELECT  SUM(totalPurchasePrice) FROM teamrReceiptTable WHERE teamName = :team),2)  "
-                         "WHERE teamName = :team");
-    insertQuery->bindValue(":team", team);
-    insertQuery->exec();
-    insertQuery->next();
+        QSqlQuery *totalSaleQuery = new QSqlQuery(myDb);
+        QSqlQueryModel* receiptQryModel = new QSqlQueryModel();
+        QSqlQueryModel* totalAmountSpentQryModel = new QSqlQueryModel();
 
 
-    sameInsertQuery->prepare("UPDATE totalAmountSpentForTeams set amountIfStadiumSame = round((SELECT  SUM(amountSpent) FROM totalAmountSpentForTeams WHERE StadiumName = :stad),2) WHERE StadiumName = :stad");
-    sameInsertQuery->bindValue(":stad", stadiumName);
-    sameInsertQuery->exec();
-    sameInsertQuery->next();
+        prepQuery -> prepare("SELECT itemPrice, stadiumName FROM souvenirList WHERE itemName = :item AND teamName = :team");
+        prepQuery -> bindValue(":item", item);
+        prepQuery -> bindValue(":team", team);
+        prepQuery -> exec();
+        prepQuery -> next();
 
-    totalSaleQuery->exec("SELECT ROUND((SUM(totalPurchasePrice)), 2) AS ROUNDVALUE FROM teamrReceiptTable");
-    totalSaleQuery->next();
-    totalSaleString = totalSaleQuery->value(0).toString();
-    totalSaleString = "Total Amount Spent: " + totalSaleString;
+        itemPrice = prepQuery->value(0).toDouble();
+        stadiumName = prepQuery->value(1).toString();
+        total = itemQuantity * itemPrice;
 
-    ui->totalAmountSpentLabel->setText(totalSaleString);
+        activeQuery->prepare("INSERT INTO teamrReceiptTable (teamName, stadiumName, itemName, itemQuantity, totalPurchasePrice) VALUES (:team, :stad, :item, :quantity, :totalSale);");
+        activeQuery->bindValue(":team", team);
+        activeQuery->bindValue(":stad", stadiumName);
+        activeQuery->bindValue(":item", item);
+        activeQuery->bindValue(":quantity", itemQuantity);
+        activeQuery->bindValue(":totalSale", total);
+        activeQuery->exec();
+        activeQuery->next();
 
-    ui->receiptTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->receiptTableView->setAlternatingRowColors(true);
+        insertQuery->prepare("UPDATE totalAmountSpentForTeams set amountSpent = round((SELECT  SUM(totalPurchasePrice) FROM teamrReceiptTable WHERE teamName = :team),2)  "
+                             "WHERE teamName = :team");
+        insertQuery->bindValue(":team", team);
+        insertQuery->exec();
+        insertQuery->next();
 
-    ui->totalSpentTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->totalSpentTableView->setAlternatingRowColors(true);
 
-    receiptQryModel->setQuery("SELECT * FROM teamrReceiptTable");
-    totalAmountSpentQryModel->setQuery("SELECT * FROM totalAmountSpentForTeams");
+        sameInsertQuery->prepare("UPDATE totalAmountSpentForTeams set amountIfStadiumSame = round((SELECT  SUM(amountSpent) FROM totalAmountSpentForTeams WHERE StadiumName = :stad),2) WHERE StadiumName = :stad");
+        sameInsertQuery->bindValue(":stad", stadiumName);
+        sameInsertQuery->exec();
+        sameInsertQuery->next();
 
-    ui->receiptTableView->setModel(receiptQryModel);
-    ui->totalSpentTableView->setModel(totalAmountSpentQryModel);
+        totalSaleQuery->exec("SELECT ROUND((SUM(totalPurchasePrice)), 2) AS ROUNDVALUE FROM teamrReceiptTable");
+        totalSaleQuery->next();
+        totalSaleString = totalSaleQuery->value(0).toString();
+        totalSaleString = "Total Amount Spent: " + totalSaleString;
+
+        ui->totalAmountSpentLabel->setText(totalSaleString);
+
+        ui->receiptTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+        ui->receiptTableView->setAlternatingRowColors(true);
+
+        ui->totalSpentTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+        ui->totalSpentTableView->setAlternatingRowColors(true);
+
+        receiptQryModel->setQuery("SELECT * FROM teamrReceiptTable");
+        totalAmountSpentQryModel->setQuery("SELECT * FROM totalAmountSpentForTeams");
+        ui->errorCheck->setText("");
+
+        ui->receiptTableView->setModel(receiptQryModel);
+        ui->totalSpentTableView->setModel(totalAmountSpentQryModel);
+    }
+    else
+    {
+        ui->errorCheck->setText("NOT AN INT! Enter an Int Into Quanaity");
+    }
+
 }
 
 
