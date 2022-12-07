@@ -55,6 +55,12 @@ private slots:
 
     void on_goBackPushButton_clicked();
 
+    void on_PatriotsPushButton_clicked();
+
+    void on_AllTeamBeginPushButton_clicked();
+
+    void on_pushButton_clicked();
+
 private:
     Ui::tripselectwindow *ui;
 

@@ -556,3 +556,112 @@ void tripselectwindow::on_goBackPushButton_clicked()
 
 }
 
+
+void tripselectwindow::on_PatriotsPushButton_clicked()
+{
+    QSqlQueryModel model;
+    QSqlQuery query(myDb);
+    QSqlQuery tripQuery(myDb);
+
+    QSqlQueryModel* teamModel = new QSqlQueryModel();
+    QSqlQueryModel* teamPlanModel = new QSqlQueryModel();
+    QSqlQuery *deleteQuery = new QSqlQuery(myDb);
+
+    deleteQuery->exec("DELETE FROM CustomTrip");
+    deleteQuery->exec("DELETE FROM FinalTrip");
+
+    ui->AllTeamTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->AllTeamTableView->setAlternatingRowColors(true);
+
+    query.exec("SELECT DISTINCT TeamName FROM TeamInformation");
+    tripQuery.exec("SELECT Team FROM CustomTrip");
+
+    teamModel->setQuery(std::move(query));
+    teamPlanModel->setQuery(std::move(tripQuery));
+
+    ui->AllTeamTableView->setModel(teamModel);
+
+    ui->tripStackedWidget->setCurrentIndex(3);
+}
+
+
+void tripselectwindow::on_AllTeamBeginPushButton_clicked()
+{
+    QString team;
+
+    QSqlQuery *addCityQuery = new QSqlQuery(myDb);
+    QSqlQueryModel* qryModel = new QSqlQueryModel();
+
+    addCityQuery->prepare("INSERT INTO CustomTrip (TeamName) VALUES (:team)");
+    addCityQuery->bindValue(":team", "New England Patriots");
+    addCityQuery->exec();
+
+
+    addCityQuery->prepare("INSERT INTO CustomTrip (TeamName) SELECT TeamName FROM TeamInformation WHERE TeamName != (:team)");
+    addCityQuery->bindValue(":team", "New England Patriots");
+    addCityQuery->exec();
+
+
+
+    djAlgo performAlgo;
+    performAlgo.CalcTripDistance();
+
+}
+
+
+void tripselectwindow::on_pushButton_clicked()
+{
+    QSqlQueryModel* teamModel = new QSqlQueryModel();
+    QSqlQueryModel* souvModel = new QSqlQueryModel();
+    QSqlQueryModel* distanceTableModel = new QSqlQueryModel();
+    QSqlQuery *addQuery = new QSqlQuery(myDb);
+    QSqlRecord record;
+    QSqlQuery query(myDb);
+    QSqlQuery queryStadName(myDb);
+    QSqlQuery souvQuery(myDb);
+    QSqlRecord startingSouvenir;
+
+    QString stadiumName;
+
+    query.exec("SELECT TeamName FROM CustomTrip");
+
+    teamModel->setQuery(std::move(query));
+    for(int i=0;i<teamModel->rowCount();i++)
+    {
+        record = teamModel->record(i);
+        ui->teamComboBox->addItem(record.value(0).toString());
+        queryStadName.prepare("SELECT StadiumName FROM TeamInformation WHERE TeamName = :team");
+        queryStadName.bindValue(":team", record.value(0).toString());
+        queryStadName.exec();
+        queryStadName.next();
+
+        stadiumName = queryStadName.value(0).toString();
+
+        addQuery->prepare("INSERT INTO totalAmountSpentForTeams(teamName, StadiumName, amountSpent, amountIfStadiumSame) VALUES (:team, :stad, :amount, :amountSame);");
+        addQuery->bindValue(":team", record.value(0).toString());
+        addQuery->bindValue(":stad", stadiumName);
+        addQuery->bindValue(":amount", 0.0);
+        addQuery->bindValue(":amountSame", 0.0);
+        addQuery->exec();
+    }
+
+    startingSouvenir = teamModel->record(0);
+    souvQuery.prepare("SELECT itemName FROM souvenirList WHERE teamName = :team");
+    souvQuery.bindValue(":team", startingSouvenir.value(0).toString());
+    souvQuery.exec();
+    souvModel->setQuery(std::move(souvQuery));
+
+    for (int i = 0; i < souvModel->rowCount(); i++)
+    {
+        record = souvModel->record(i);
+        ui->SouvenirComboBox->addItem(record.value(0).toString());
+    }
+
+    distanceTableModel->setQuery("SELECT * FROM FinalTrip");
+    ui->customTripDistanceTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->customTripDistanceTableView->setAlternatingRowColors(true);
+    ui->customTripDistanceTableView->setModel(distanceTableModel);
+
+    ui->tripStackedWidget->setCurrentIndex(5);
+}
+

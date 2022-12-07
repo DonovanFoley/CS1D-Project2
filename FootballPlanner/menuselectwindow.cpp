@@ -1,5 +1,6 @@
 #include "menuselectwindow.h"
 #include "ui_menuselectwindow.h"
+#include <vector>
 
 menuselectwindow::menuselectwindow(QWidget *parent) :
     QWidget(parent),
@@ -369,7 +370,61 @@ void menuselectwindow::on_openRoofStadiumInfo_clicked()
 
 void menuselectwindow::on_nflSeatingCapacity_clicked()
 {
+    std::vector<int> seatingCapacities;
+    std::vector<QString> stadiums;
+    int totalCapacity = 0;
+    QString prevStadium = "";
+    QSqlDatabase myDb;
 
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+    {
+        myDb = QSqlDatabase::database("qt_sql_default_connection");
+    }
+    else
+    {
+        myDb = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+    QSqlQueryModel* qryModel = new QSqlQueryModel();
+    QSqlQuery *prepQuery = new QSqlQuery(myDb);
+    QSqlQuery query(myDb);
+
+    query.prepare("SELECT SeatingCapacity FROM TeamInformation ORDER BY SeatingCapacity ASC");
+    query.exec();
+
+    while (query.next())
+    {
+        seatingCapacities.push_back(query.value(0).toInt());
+    }
+
+    query.prepare("SELECT StadiumName FROM TeamInformation ORDER BY SeatingCapacity ASC");
+    query.exec();
+
+    while (query.next())
+    {
+        stadiums.push_back(query.value(0).toString());
+    }
+
+    ui->mainMenuStackedWidget->setCurrentIndex(1);
+
+    ui->footBallTeamTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->footBallTeamTableWidget->setAlternatingRowColors(true);
+
+    prepQuery->prepare("SELECT TeamName, stadiumName, SeatingCapacity FROM TeamInformation ORDER BY SeatingCapacity ASC");
+    prepQuery->exec();
+
+    qryModel->setQuery(std::move(*prepQuery));
+    ui->footBallTeamTableWidget->setModel(qryModel);
+
+    for (int i = 0; i < seatingCapacities.size(); i++) {
+        totalCapacity += seatingCapacities[i];
+        if (prevStadium == stadiums[i]) {
+            totalCapacity -= seatingCapacities[i];
+        }
+        prevStadium = stadiums[i];
+    }
+    QString label = QString::fromStdString("Total Seating Capacity: ") + QString::number(totalCapacity);
+    ui->filterLabel->setText(label);
 }
 
 
@@ -394,8 +449,7 @@ void menuselectwindow::on_conferenceSort_clicked()
     ui->footBallTeamTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->footBallTeamTableWidget->setAlternatingRowColors(true);
 
-    prepQuery->prepare("SELECT TeamName, StadiumName, Division, Location, Conference FROM TeamInformation WHERE Conference = :conf ORDER BY Division ASC");
-    prepQuery->bindValue(":conf", "National Football Conference");
+    prepQuery->prepare("SELECT TeamName, StadiumName, Location, Conference FROM TeamInformation ORDER BY Conference ASC");
     prepQuery->exec();
 
     qryModel->setQuery(std::move(*prepQuery));
