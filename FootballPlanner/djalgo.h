@@ -560,12 +560,12 @@ class djAlgo :public initEdgeList, initVertexList
                         qDebug().noquote() << "comp stadium: " << compareStadium;
                          qDebug().noquote() << "closet teamname stadium: " << closestTeamName;
 
-                        if (compareStadium == getStadiumNameFromTeamName(closestTeamName)) {
-                            temp = 0;
-                            qDebug().noquote() << "team_names[j] for closest teamname" << team_names[j];
-                            closestTeamName = team_names[j];
-                        }
-                        else {
+//                        if (compareStadium == getStadiumNameFromTeamName(closestTeamName)) {
+//                            temp = 0;
+//                            qDebug().noquote() << "team_names[j] for closest teamname" << team_names[j];
+//                            closestTeamName = team_names[j];
+//                        }
+                        //else {
                             for (int k = 0; k < edgeCost.size(); k++)
                             {
                                 qDebug().noquote() << " EDGE " << QString::fromStdString(verticies[k].vertexName);
@@ -580,7 +580,7 @@ class djAlgo :public initEdgeList, initVertexList
                                     }
                                 }
                             }
-                        }
+                        //}
                     }
                     distance += temp;
                     addQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
