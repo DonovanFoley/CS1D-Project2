@@ -460,20 +460,22 @@ class djAlgo :public initEdgeList, initVertexList
                     team_names.push_back(query.value(0).toString());
                 }
 
-                for (int i = 0; i < team_names.size(); i++) {
-                    if (i == 0) {
-                        addQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
-                        addQuery->bindValue(":teamname", team_names[i]);
-                        qDebug().noquote() << "COOLNANN" << team_names[i];
-                        addQuery->bindValue(":distance", 0);
-                        addQuery->exec();
-                        addQuery->next();
+                int k = 0;
+                addQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
+                addQuery->bindValue(":teamname", team_names[k]);
+                addQuery->bindValue(":distance", 0);
+                addQuery->exec();
+                addQuery->next();
+
+                for (int i = 0; i < team_names.size() - 1; i++) {
+                    if (i == 10000) {
                     }
                     else {
                         qDebug().noquote() << "COOLNANN" << team_names[i];
                         stadium = getStadiumNameFromTeamName(team_names[i]);
                         DijkstraAlgo(stadium.toStdString());
-                        prevStadium = getStadiumNameFromTeamName(team_names[i - 1]);
+                        prevStadium = getStadiumNameFromTeamName(team_names[i + 1]);
+
                         if (prevStadium == stadium) {
                             addQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
                             addQuery->bindValue(":teamname", team_names[i]);
@@ -488,7 +490,7 @@ class djAlgo :public initEdgeList, initVertexList
                             }
                         }
                         addQuery->prepare("INSERT INTO FinalTrip VALUES (:teamname, :distance)");
-                        addQuery->bindValue(":teamname", team_names[i]);
+                        addQuery->bindValue(":teamname", team_names[i + 1]);
                         addQuery->bindValue(":distance", distance);
                         addQuery->exec();
                         addQuery->next();
