@@ -17,7 +17,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="adminStackedWidget">
      <property name="currentIndex">
-      <number>4</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_7">
@@ -697,14 +697,14 @@
          <item>
           <widget class="QLabel" name="adminLabel">
            <property name="text">
-            <string>TEST</string>
+            <string/>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="allSeatLabel">
            <property name="text">
-            <string>TextLabel</string>
+            <string/>
            </property>
           </widget>
          </item>
@@ -781,6 +781,12 @@
                </item>
                <item>
                 <widget class="QLineEdit" name="modifyLineEdit">
+                 <property name="minimumSize">
+                  <size>
+                   <width>250</width>
+                   <height>0</height>
+                  </size>
+                 </property>
                  <property name="placeholderText">
                   <string>Modify Stadium Info</string>
                  </property>
@@ -788,6 +794,12 @@
                </item>
                <item>
                 <widget class="QLineEdit" name="capacityModify">
+                 <property name="minimumSize">
+                  <size>
+                   <width>250</width>
+                   <height>0</height>
+                  </size>
+                 </property>
                  <property name="text">
                   <string/>
                  </property>
@@ -800,6 +812,19 @@
                 </widget>
                </item>
               </layout>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="newYearLineEdit">
+               <property name="minimumSize">
+                <size>
+                 <width>200</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="placeholderText">
+                <string>Enter New Year</string>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QPushButton" name="modifyTeamInfoPushButton">

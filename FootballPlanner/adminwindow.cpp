@@ -683,13 +683,18 @@ void adminwindow::on_modifyTeamInfoPushButton_clicked()
     QString teamName;
     QString stadiumName;
     int seatingQuantity;
+    int year;
     string quantityString;
+    string yearString;
     bool isInt = false;
+    bool isIntYear = false;
 
     teamName = ui->teamBox1->currentText();
     stadiumName = ui->modifyLineEdit->text();
     seatingQuantity = ui->capacityModify->text().toInt();
     quantityString = ui->capacityModify->text().toStdString();
+    year = ui->newYearLineEdit->text().toInt();
+    yearString = ui->newYearLineEdit->text().toStdString();
 
     if (stadiumName == "" || quantityString == "")
     {
@@ -711,31 +716,49 @@ void adminwindow::on_modifyTeamInfoPushButton_clicked()
 
         if(isInt == true)
         {
-            qDebug().noquote() << "in if";
-            QSqlQuery query;
-            QSqlQuery souvQry;
+            for (char const ch: yearString)
+            {
+                if (std::isdigit(ch))
+                {
+                    isIntYear = true;
+                }
+                else
+                {
+                    isIntYear = false;
+                }
+            }
 
-            QSqlQueryModel* queryModel = new QSqlQueryModel();
+            if (isIntYear == true)
+            {
+                QSqlQuery query;
+                QSqlQuery souvQry;
 
-            query.prepare("UPDATE TeamInformation SET SeatingCapacity = :cap, StadiumName = :newName WHERE TeamName = :team");
-            query.bindValue(":cap", seatingQuantity);
-            query.bindValue(":newName", stadiumName);
-            query.bindValue(":team", teamName);
-            query.exec();
+                QSqlQueryModel* queryModel = new QSqlQueryModel();
 
-            souvQry.prepare("UPDATE souvenirList SET stadiumName = :stad WHERE TeamName = :team");
-            souvQry.bindValue(":stad", stadiumName);
-            souvQry.bindValue(":team", teamName);
-            souvQry.exec();
+                query.prepare("UPDATE TeamInformation SET SeatingCapacity = :cap, StadiumName = :newName, DateOpened = :date WHERE TeamName = :team");
+                query.bindValue(":cap", seatingQuantity);
+                query.bindValue(":newName", stadiumName);
+                query.bindValue(":date", year);
+                query.bindValue(":team", teamName);
+                query.exec();
 
-            ui->teamTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-            ui->teamTable->setAlternatingRowColors(true);
+                souvQry.prepare("UPDATE souvenirList SET stadiumName = :stad WHERE TeamName = :team");
+                souvQry.bindValue(":stad", stadiumName);
+                souvQry.bindValue(":team", teamName);
+                souvQry.exec();
 
-            ui->errorLabelCapacity->setText("");
+                ui->teamTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+                ui->teamTable->setAlternatingRowColors(true);
 
-            queryModel->setQuery("SELECT * FROM TeamInformation");
-            ui->teamTable->setModel(queryModel);
+                ui->errorLabelCapacity->setText("");
 
+                queryModel->setQuery("SELECT * FROM TeamInformation");
+                ui->teamTable->setModel(queryModel);
+            }
+            else
+            {
+                ui->errorLabelCapacity->setText("NOT AN INT! Enter an integer into Year Change");
+            }
         }
         else
         {
